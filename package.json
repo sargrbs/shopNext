@@ -1,0 +1,9 @@
+{
+  "name": "api",
+  "version": "1.0",
+  "description": "api-shop9",
+  "main": "index.js",
+  "repository": "https://github.com/sargrbs/apishop.git",
+  "author": "Rubens Braga",
+  "license": "MIT"
+}
