@@ -8,7 +8,7 @@ router.get("/", (req, res) => {
     return res.json('Server Running')
 })
 
-router.get("/getProducts", Products.getProducts)
+router.get("/getProducts/:page", Products.getProducts)
 // router.get("/getToken", GetToken.getToken)
 
 

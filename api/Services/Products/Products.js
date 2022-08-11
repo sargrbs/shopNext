@@ -9,21 +9,22 @@ export default {
             const token = fetchToken.token
             const getSignature = signature({method: "get", data: false})
 
-            const headers = {'Signature': getSignature.signature, 
-                        'CodFilial': 1,
-                        'Authorization': `Token ${token.token}`,
-                        'Timestamp': getSignature.timestamp}
-                        
-            const result = await axios.get('http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/produtos/1', {headers: headers})
-                .then(function (response) {
-                    return res.json(response.data)
-                })
-                .catch(function (error) {
-                    return res.json(error)
+            const headers = {
+                'Signature': getSignature.signature, 
+                'CodFilial': 1,
+                'Authorization': `Token ${token.token}`,
+                'Timestamp': getSignature.timestamp
+            }
+
+            const {page} = req.params
+
+            await axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/produtos/${page}`, {headers: headers})
+            .then(function (response) {
+                return res.json(response.data)
             })
-
-            // console.log(result)
-
+            .catch(function (error) {
+                return res.json(error)
+            })
         }
     }
 }
