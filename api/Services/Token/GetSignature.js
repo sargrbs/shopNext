@@ -1,10 +1,10 @@
 import crypto from "crypto"
 
 export default function signature(params){ 
-    const data = params.data ? params.data : ""
+    const data = params.data ? params.data : false
 
     const method = params.method 
-    
+
     const date = new Date()
 
     const getTimestamp = Math.floor(date.getTime() / 1000)
@@ -15,10 +15,10 @@ export default function signature(params){
 
     const reqdata = JSON.stringify(data)
 
-    const dataPost = Buffer.from(reqdata).toString('base64')
-
+    const dataPost = !reqdata ? Buffer.from(reqdata).toString('base64') : ""
+    
     const concatSignature = method + timestamp + dataPost
-
+    
     const cryp = crypto.createHmac("sha256", key).update(concatSignature).digest()
     
     const signature = Buffer.from(cryp).toString('base64')

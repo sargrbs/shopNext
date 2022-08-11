@@ -13,8 +13,8 @@ export default {
                         'CodFilial': 1,
                         'Authorization': `Token ${token.token}`,
                         'Timestamp': getSignature.timestamp}
-    
-            const result = await axios.get('http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/produtos/1', {data: {}}, {headers: headers})
+                        
+            const result = await axios.get('http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/produtos/1', {headers: headers})
                 .then(function (response) {
                     return res.json(response.data)
                 })
@@ -22,7 +22,7 @@ export default {
                     return res.json(error)
             })
 
-            console.log(result)
+            // console.log(result)
 
         }
     }
