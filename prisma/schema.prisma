@@ -21,6 +21,44 @@ model User {
 model Token {
   id String @unique
   token String
+  expireAt DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Products {
+  id String @unique
+  codigo Int
+  nome String
+  observacao1 String
+  observacao2 String
+  observacao3 String
+  tipo Int
+  codigoClasse Int
+  codigoSubclasse Int
+  codigoCor Int
+  codigoTamanho Int
+  codigoGrupo Int
+  codigoMoeda Int
+  codigoFamilia Int
+  codigoUnidadeVenda Int
+  codigoPesquisa1 Int
+  codigoPesquisa2 Int
+  codigoPesquisa3 Int
+  pesoLiquido Decimal  @db.Decimal(15,2)	
+  pesoBruto Decimal  @db.Decimal(15,2)	
+  altura Decimal  @db.Decimal(15,2)	
+  largura Decimal  @db.Decimal(15,2)	
+  comprimento Decimal  @db.Decimal(15,2)	
+  estoqueAtual Decimal  @db.Decimal(15,2)	
+  codigoFabricante Int
+  codigoBarras String
+  urlDetalhe String
+  urlEstoqueDetalhe String
+  urlTabelaPreco String
+  urlPromocoes String
+  urlFotos String
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }

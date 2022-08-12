@@ -9,6 +9,8 @@ router.get("/", (req, res) => {
 })
 
 router.get("/getProducts/:page", Products.getProducts)
+router.get("/getProduct/:code", Products.getProduct)
+router.get("/getByUrl/:code", Products.getByUrl)
 // router.get("/getToken", GetToken.getToken)
 
 
