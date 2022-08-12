@@ -25,6 +25,13 @@ model Token {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
+model Aux {
+  id String @unique
+  code String
+  name String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
 
 model Products {
   id String @unique

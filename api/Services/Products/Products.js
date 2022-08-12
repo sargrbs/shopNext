@@ -80,10 +80,12 @@ export default {
                     'Timestamp': getSignature.timestamp
                 }
 
-                const {url} = req.params
+                const paramsBusca = new URLSearchParams(req.query)
 
-                const result =  await axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/${url}`, {headers: headers})
-                                                       
+                const url = paramsBusca.get('url')
+               
+                const result =  await axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500${url}`, {headers: headers})
+                
                 const data = {result:  result.data}
 
                 return res.json(data)

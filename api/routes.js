@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import Products from './Services/Products/Products';
-import GetToken from './Services/Token/GetToken';
+import Aux from './Services/Products/ProductAux';
 
 const router = Router();
 
@@ -10,8 +10,8 @@ router.get("/", (req, res) => {
 
 router.get("/getProducts/:page", Products.getProducts)
 router.get("/getProduct/:code", Products.getProduct)
-router.get("/getByUrl/:code", Products.getByUrl)
-// router.get("/getToken", GetToken.getToken)
+router.get("/getByUrl", Products.getByUrl)
+router.get("/getAux", Aux.getAux)
 
 
 export {router}
