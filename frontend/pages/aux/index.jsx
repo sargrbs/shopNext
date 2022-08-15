@@ -5,6 +5,8 @@ import Header from '../modules/Header'
 import {useQuery, useMutation} from '@tanstack/react-query'
 import ToastSuccess from '../components/ToastSuccess'
 import ToastError from '../components/ToastError'
+import useToast from '../components/HookToast'
+
 import {v4 as uuidv4} from 'uuid';
 
 async function getData({queryKey}){
@@ -18,11 +20,7 @@ export default function Aux() {
     const url = process.env.AXIOS_URL
 
     const [aux, setAux] = useState('cores')
-    const [showAlert, setShowAlert] = useState(true)
-    const [toastMessage, setToastMessage] = useState('')
-    const [ToastTitle, setToastTitle] = useState('')
-    const [success, setSuccess] = useState(true)
-    const [error, setError] = useState(false)
+    const {showToast} = useToast()
 
     const {data, isFetching, refetch, isFetched} = useQuery(['aux', aux], getData, {refetchOnWindowFocus: false, enable: false})
 
@@ -31,22 +29,15 @@ export default function Aux() {
       refetch()
     }
 
-    const { mutate: createAux, isLoading: mutLoading } = useMutation(
+    const { mutate: createAux} = useMutation(
         async (data) => { return axios.post(`${url}createAux`, data) },
         {
         onSuccess: (res) => {
-            console.log(res)
-            setSuccess(true)
-            setShowAlert(true)
-            setToastMessage('res succ')
-            setToastTitle('Auxiliares adicionado com sucesso')
+            showToast(`Sucesso ao adicionar Auxiliares`, 'Itens adicionados', true, false)
         },
         onError: (err) => {
             console.log(err)
-            setError(true)
-            setToastMessage('errr res')
-            setToastTitle('Erro ao adicionar Auxiliares')
-            setShowAlert(true)
+            showToast(`Erro ao adicionar Auxiliares / ${err}`, 'Erro ao Importar', false, true)
         },
         }
     )
@@ -67,18 +58,8 @@ export default function Aux() {
     return (
         <>
             <Container>
-                <ToastSuccess 
-                    success={success}
-                    alert={showAlert}
-                    title={ToastTitle}
-                    message={toastMessage}
-                />
-                <ToastError
-                    error={error}
-                    alert={showAlert}
-                    title={ToastTitle}
-                    message={toastMessage}
-                />
+                <ToastSuccess />
+                <ToastError />
                 
                 <Row>
                     <Col md='2'>
@@ -86,11 +67,6 @@ export default function Aux() {
                     </Col>
                     
                     <Col md="10">
-                        <Row>
-                            <Col>
-                                <Button variant="success" onClick={addAux}>Salvar</Button>
-                            </Col>
-                        </Row>
                         <Row>
                             <Col md="5">
                                 <InputGroup style={{marginBottom: 10}}>
@@ -105,6 +81,9 @@ export default function Aux() {
                                         Buscar
                                     </Button>
                                 </InputGroup>
+                            </Col>
+                            <Col md="7">
+                                <Button variant="success" onClick={addAux}>Salvar Itens</Button>
                             </Col>
                         </Row>
                         <Table responsive striped bordered hover variant="dark">

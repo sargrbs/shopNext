@@ -5,6 +5,7 @@ import {Container, Row, Col, Table, Button, Form, InputGroup} from 'react-bootst
 import Header from '../modules/Header'
 import {useQuery} from '@tanstack/react-query'
 import GetPriceItem from '../components/GetPriceItem'
+import AuxName from '../components/AuxName'
 
 async function getData({queryKey}){
   const code = queryKey[1]
@@ -187,7 +188,7 @@ export default function Products() {
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
                                                     <td>{product.codigoCompleto}</td>
-                                                    <td>{product.codigoCor}</td>
+                                                    <td><AuxName code={product.codigoCor} queryName={`cor${product.codigoCor}`}/></td>
                                                     <td>{product.codigoTamanho}</td>
                                                     <td>{product.codigoFilial}</td>
                                                     <td>{product.estoqueAtual}</td>

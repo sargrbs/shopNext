@@ -5,8 +5,6 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import {Container, Navbar} from 'react-bootstrap'
-import logo from '../public/vercel.svg'
-import Image from 'next/image'
 import {ToastProvider} from '../pages/components/ToastContext'
 
 // Create a client for react-query

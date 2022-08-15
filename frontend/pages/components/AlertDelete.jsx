@@ -26,9 +26,8 @@ export default function AlertDelete(props) {
           },
           onError: (err) => {
             console.log('error')
-            setError(true)
-            setToastTitle('Erro ao Excluir')
-            setToastMessage(err)
+
+            showToast(`Erro ao deletar item ${item} / ${err}`, 'Erro ao Excluir', false, true)
           },
         }
       )

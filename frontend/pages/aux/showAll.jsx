@@ -20,16 +20,17 @@ export default function Aux() {
 
     const {data, isFetching, isFetched} = useQuery(['showAllaux'], getData, {refetchOnWindowFocus: false})
     
+    console.log(data)
     return (
         <>
+            <ToastSuccess/>
+            <ToastError/>
             <Container>
-                <ToastSuccess/>
                 <Row>
                     <Col md='2'>
                         <Header/>
                     </Col>
-                     <ToastSuccess/>
-                     <ToastError/>
+
                     <Col md="10">
                         <Table responsive striped bordered hover variant="dark">
                         <thead>
@@ -42,7 +43,7 @@ export default function Aux() {
                         </thead>
                         <tbody>
                             {isFetching ? <tr><td colSpan={34}><Spinner animation="border" variant="primary" /></td></tr> :
-                            data.data === null ? <tr><td colSpan={34}>Nenhum dado Encontrado</td></tr> :
+                            data.data.length === 0 ? <tr><td colSpan={34}>Nenhum dado Encontrado</td></tr> :
                                 data.data?.map((aux, index) => {
                                 return (
                                     <tr key={index}>
