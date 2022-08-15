@@ -6,10 +6,15 @@ export default function Header() {
         <Nav.Link href="/">Home</Nav.Link>
 
         <NavDropdown title="Produtos" id="nav-dropdown">
-          <NavDropdown.Item href="/products/">Todos Produtos</NavDropdown.Item>
-          <NavDropdown.Item href="/products/product">Filtrar por código</NavDropdown.Item>
+          <NavDropdown.Item href="/products/">Importar do Shop 9</NavDropdown.Item>
+          <NavDropdown.Item href="/products/product">Importar por código</NavDropdown.Item>
         </NavDropdown>
-        <Nav.Link href="/aux">Auxiliares / Variações</Nav.Link>
+
+        <NavDropdown title="Auxiliares / Variações" id="nav-dropdown">
+          <NavDropdown.Item href="/aux">Importar do Shop 9</NavDropdown.Item>
+          <NavDropdown.Item href="/aux/showAll">Gerenciar Importados</NavDropdown.Item>
+        </NavDropdown>
+
         {/* <Nav.Link href="/products/">Todos Produtos</Nav.Link>
         <Nav.Link href="/products/product">Filtrar por código</Nav.Link> */}
       </Nav>
