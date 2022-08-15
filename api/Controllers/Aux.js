@@ -34,13 +34,31 @@ export default {
             return res.json(error)
         }
     },
+    async getAuxByCode(req, res){
+        const id = req.params
+        try{
+
+            const data = await prisma.aux.findFirst({
+                where:{
+                    code: id.id
+                }
+            })
+
+            return res.json(data)
+
+        }catch(error){
+            console.log(error)
+            return res.json(error)
+        }
+    },
     async deleteItem(req, res){
         const id = req.params
+
         try{
 
             const data = await prisma.aux.delete({
                 where:{
-                    id: id
+                    id: id.id
                 }
             })
 

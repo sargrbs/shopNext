@@ -25,6 +25,35 @@ model Token {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
+
+model ProductStock {
+  id String @unique
+  quantity Int
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  productVariations ProductVariations?
+
+}
+
+model ProductVariations {
+  id String @unique
+  name String
+  code String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  productStockId String  @unique
+  productStock ProductStock @relation(fields: [productStockId], references: [id])
+  
+  product Product @relation(fields: [productId], references: [id])
+  productId String
+
+  auxs VariationtOnAux[]
+}
+
 model Aux {
   id String @unique
   code String @unique
@@ -32,18 +61,18 @@ model Aux {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  products ProductOnAux[]
+  variation VariationtOnAux[]
 }
 
-model ProductOnAux{
-  product       Product   @relation(fields: [productId], references: [id])
-  productId     String
+model VariationtOnAux {
+  variation       ProductVariations   @relation(fields: [variationId], references: [id])
+  variationId     String
   aux   Aux @relation(fields: [auxId], references: [id])
   auxId String
   assignedAt DateTime @default(now())
   assignedBy String
 
-  @@id([productId, auxId])
+  @@id([variationId, auxId])
 }
 
 model Product {
@@ -79,8 +108,10 @@ model Product {
   urlPromocoes String
   urlFotos String
 
-  auxs ProductOnAux[]
+  
+  ProductVariations ProductVariations[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
+
