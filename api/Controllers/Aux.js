@@ -5,25 +5,49 @@ import {v4 as uuidv4} from 'uuid';
 export default {
     async createAux(req, res) {
         try {
-            const aux = await prisma.aux.findFirst({ where: { code: code } })
+            const data = req.body
             
-            if (aux) {
-                null
-            }else{
-                const createAux = await prisma.aux.create({
-                    data: {
-                        id: uuidv4(),
-                        codigo: code,
-                        name: name
-                    }
+            const create = data.map((aux) => 
+                prisma.aux.create({
+                    data: aux
                 })
-            }
+                
+            )
+            await Promise.all(create)
             
-            const status = null
-
-            return res.json(status)
+            return res.json(create)
 
         } catch (error) {
+            console.log(error)
+            return res.json(error)
+        }
+    },
+    async getAll(req, res){
+        try{
+
+            const data = await prisma.aux.findMany()
+
+            return res.json(data)
+
+        }catch(error){
+            console.log(error)
+            return res.json(error)
+        }
+    },
+    async deleteItem(req, res){
+        const id = req.params
+        try{
+
+            const data = await prisma.aux.delete({
+                where:{
+                    id: id
+                }
+            })
+
+            return res.json(data)
+
+        }catch(error){
+            console.log(error)
             return res.json(error)
         }
     }

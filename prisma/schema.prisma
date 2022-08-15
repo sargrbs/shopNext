@@ -27,13 +27,26 @@ model Token {
 }
 model Aux {
   id String @unique
-  code String
+  code String @unique
   name String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  products ProductOnAux[]
 }
 
-model Products {
+model ProductOnAux{
+  product       Product   @relation(fields: [productId], references: [id])
+  productId     String
+  aux   Aux @relation(fields: [auxId], references: [id])
+  auxId String
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([productId, auxId])
+}
+
+model Product {
   id String @unique
   codigo Int
   nome String
@@ -65,6 +78,8 @@ model Products {
   urlTabelaPreco String
   urlPromocoes String
   urlFotos String
+
+  auxs ProductOnAux[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

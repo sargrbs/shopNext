@@ -1,6 +1,7 @@
 import axios from "axios";
 import getToken from '../Token/GetToken';
 import signature from "../Token/GetSignature";
+import {v4 as uuidv4} from 'uuid';
 
 export default {
     async getAux(req, res){
@@ -21,7 +22,7 @@ export default {
                 const paramsBusca = new URLSearchParams(req.query)
 
                 const aux = paramsBusca.get('aux')
-                console.log(paramsBusca)
+                
                 await axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/aux/${aux}`, {headers: headers})
                 .then(function (response) {
                     return res.json(response.data)
