@@ -10,41 +10,26 @@ import AlertDelete from '../components/AlertDelete'
 async function getData(){
   const url = process.env.AXIOS_URL
   const result = await axios.get(`${url}getAllAux`)
+
   return result
 }
 
 export default function Aux() {
     const url = process.env.AXIOS_URL
     const urlDelete = `${url}deleteAux`
-    const [showAlert, setShowAlert] = useState(false)
-    const [toastMessage, setToastMessage] = useState('')
-    const [ToastTitle, setToastTitle] = useState('')
-    const [success, setSuccess] = useState(false)
-    const [error, setError] = useState(false)
 
     const {data, isFetching, isFetched} = useQuery(['showAllaux'], getData, {refetchOnWindowFocus: false})
     
     return (
         <>
             <Container>
-                <ToastSuccess 
-                    success={success}
-                    alert={showAlert}
-                    title={ToastTitle}
-                    message={toastMessage}
-                />
-                <ToastError
-                    error={error}
-                    alert={showAlert}
-                    title={ToastTitle}
-                    message={toastMessage}
-                />
-                
+                <ToastSuccess/>
                 <Row>
                     <Col md='2'>
                         <Header/>
                     </Col>
-                    
+                     <ToastSuccess/>
+                     <ToastError/>
                     <Col md="10">
                         <Table responsive striped bordered hover variant="dark">
                         <thead>

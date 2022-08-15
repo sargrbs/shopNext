@@ -2,23 +2,17 @@ import React, {useState} from 'react'
 import axios from 'axios'
 import {Modal, Button} from 'react-bootstrap'
 import {useMutation, useQueryClient} from '@tanstack/react-query'
-import ToastError from './ToastError'
-import ToastSuccess from './ToastSuccess'
+import useToast from '../components/HookToast'
 
 export default function AlertDelete(props) {
 
     const [show, setShow] = useState(false);
-    const [toastMessage, setToastMessage] = useState('')
-    const [ToastTitle, setToastTitle] = useState('')
-    const [success, setSuccess] = useState(false)
-    const [error, setError] = useState(false)
+    const {showToast} = useToast()
+    const item = props.item
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-    // function deleteItem(){
-
-    // }
+    const handleShow = () =>  setShow(true) 
+   
     const queryClient = useQueryClient()
 
     const { mutate: deleteItem } = useMutation(
@@ -27,35 +21,28 @@ export default function AlertDelete(props) {
         },
         {
           onSuccess: (res) => {
+            showToast(`Sucesso ao deletar item ${item}`, 'Item Excluido', true, false)
             queryClient.invalidateQueries(props.queryInvalidate)
-            setSuccess(true)
-            setToastTitle('Item Excluido')
-            setToastMessage(`Sucesso ao deletar item ${props.item}`)
           },
           onError: (err) => {
+            console.log('error')
             setError(true)
             setToastTitle('Erro ao Excluir')
             setToastMessage(err)
           },
         }
       )
-
-    
+     
     return (
         <>
-            <ToastSuccess 
-                success={success}
-                alert={success}
-                title={ToastTitle}
-                message={toastMessage}
-            />
-            <ToastError
-                error={error}
-                alert={error}
-                title={ToastTitle}
-                message={toastMessage}
-            />
-            <Modal show={show} onHide={handleClose} style={{color: "#444"}}>
+           
+            <Modal 
+                show={show} 
+                onHide={handleClose} 
+                style={{color: "#444"}} 
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
                 <Modal.Header closeButton>
                     <Modal.Title >Deletar item {props.item}</Modal.Title>
                 </Modal.Header>
@@ -70,6 +57,7 @@ export default function AlertDelete(props) {
                         Sim !!! Deletar
                     </Button>
                 </Modal.Footer>
+               
             </Modal>
             
             <Button variant="danger" onClick={handleShow}>

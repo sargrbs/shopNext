@@ -7,21 +7,24 @@ import {
 import {Container, Navbar} from 'react-bootstrap'
 import logo from '../public/vercel.svg'
 import Image from 'next/image'
+import {ToastProvider} from '../pages/components/ToastContext'
+
 // Create a client for react-query
 const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
-     
-      <Navbar bg="dark" variant="dark" style={{marginBottom: 20}}>
-        <Container>
-          <Navbar.Brand href="/" >
-            API SHOP 9 
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
-      <Component {...pageProps} />
+        <Navbar bg="dark" variant="dark" style={{marginBottom: 20}}>
+          <Container>
+            <Navbar.Brand href="/" >
+              API SHOP 9 
+            </Navbar.Brand>
+          </Container>
+        </Navbar>
+        <ToastProvider>
+          <Component {...pageProps} />
+        </ToastProvider>
     </QueryClientProvider>
   )
 }
