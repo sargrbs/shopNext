@@ -19,7 +19,7 @@ async function getData({queryKey}){
 export default function Aux() {
     const url = process.env.AXIOS_URL
 
-    const [aux, setAux] = useState('cores')
+    const [aux, setAux] = useState()
     const {showToast} = useToast()
 
     const {data, isFetching, refetch, isFetched} = useQuery(['aux', aux], getData, {refetchOnWindowFocus: false, enable: false})
@@ -44,11 +44,13 @@ export default function Aux() {
     const createData = []
 
     function addAux(){
+        const group_name = aux
         data.dados?.map((aux, index) => {
             createData.push({
                 id: uuidv4(),
                 code: aux.codigo,
-                name: aux.nome
+                name: aux.nome,
+                group_name: group_name
             })
         })
         

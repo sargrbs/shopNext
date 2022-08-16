@@ -56,12 +56,14 @@ model ProductVariations {
 
 model Aux {
   id String @unique
-  code String @unique
+  code String
   name String
+  group_name String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
   variation VariationtOnAux[]
+  products ProductOnAux[]
 }
 
 model VariationtOnAux {
@@ -75,41 +77,55 @@ model VariationtOnAux {
   @@id([variationId, auxId])
 }
 
+
+model ProductOnAux {
+  product       Product   @relation(fields: [productId], references: [id])
+  productId     String
+  aux   Aux @relation(fields: [auxId], references: [id])
+  auxId String
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([productId, auxId])
+}
+
 model Product {
   id String @unique
-  codigo Int
-  nome String
-  observacao1 String
-  observacao2 String
-  observacao3 String
-  tipo Int
-  codigoClasse Int
-  codigoSubclasse Int
-  codigoCor Int
-  codigoTamanho Int
-  codigoGrupo Int
-  codigoMoeda Int
-  codigoFamilia Int
-  codigoUnidadeVenda Int
-  codigoPesquisa1 Int
-  codigoPesquisa2 Int
-  codigoPesquisa3 Int
-  pesoLiquido Decimal  @db.Decimal(15,2)	
-  pesoBruto Decimal  @db.Decimal(15,2)	
-  altura Decimal  @db.Decimal(15,2)	
-  largura Decimal  @db.Decimal(15,2)	
-  comprimento Decimal  @db.Decimal(15,2)	
-  estoqueAtual Decimal  @db.Decimal(15,2)	
-  codigoFabricante Int
-  codigoBarras String
-  urlDetalhe String
-  urlEstoqueDetalhe String
-  urlTabelaPreco String
-  urlPromocoes String
-  urlFotos String
+  code_default Int?
+  name String
+  type Int?
+  gtin String?
+  nettWeight  Decimal?  @db.Decimal(15,2)	//peso liquido
+  grossWeight Decimal?  @db.Decimal(15,2)	//peso bruto
+  height Decimal?  @db.Decimal(15,2)	
+  width Decimal?  @db.Decimal(15,2)	
+  length Decimal?  @db.Decimal(15,2)	
+  currentsupply Decimal?  @db.Decimal(15,2)	
 
+  detailurl String?
+  urldetailstock String?
+  urlpricetable String?
+  urloffers String?
+  urlpics String?
+
+  web_erp_code String?
   
   ProductVariations ProductVariations[]
+  auxs ProductOnAux[]
+
+
+  // codigoFabricante Int
+  // codigoClasse Int
+  // codigoSubclasse Int
+  // codigoCor Int
+  // codigoTamanho Int
+  // codigoGrupo Int
+  // codigoMoeda Int
+  // codigoFamilia Int
+  // codigoUnidadeVenda Int
+  // codigoPesquisa1 Int
+  // codigoPesquisa2 Int
+  // codigoPesquisa3 Int
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

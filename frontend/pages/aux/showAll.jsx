@@ -37,6 +37,7 @@ export default function Aux() {
                             <tr>
                                 <th>#</th>
                                 <th>Nome</th>
+                                <th>Grupo</th>
                                 <th>Código</th>
                                 <th>Deletar</th>
                             </tr>
@@ -49,6 +50,7 @@ export default function Aux() {
                                     <tr key={index}>
                                         <td>{index + 1}</td>
                                         <td>{aux.name}</td>
+                                        <td>{aux.group_name}</td>
                                         <td>{aux.code}</td>
                                         <td>
                                             <AlertDelete 

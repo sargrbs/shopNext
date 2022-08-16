@@ -5,8 +5,9 @@ import {useQuery} from '@tanstack/react-query'
 
 async function getData({queryKey}){
   const code = queryKey[1]
+  const group = queryKey[2]
   const url = process.env.AXIOS_URL
-  const result = await axios.get(`${url}getAuxByCode/${code}`)
+  const result = await axios.get(`${url}getAuxByCode/${code}/?group=${group}`)
 
   return result
 }
@@ -14,13 +15,16 @@ async function getData({queryKey}){
 
 export default function AuxName(props) {
 
-    const code = props.code
+  const code = props.code
+  const group = props.group
 
-    const {data, isFetching, refetch, isFetched} = useQuery([`${props.queryName}`, code], getData, {refetchOnWindowFocus: false})
+  const {data, isFetching, refetch, isFetched} = useQuery([`${props.queryName}`, code, group], getData, {refetchOnWindowFocus: false})
 
-    return (
-        <>{isFetching ? "Loaging" : <span>{data.data?.name}</span>}
-            
-        </>
-    )
+  return (
+    <>
+      
+      {isFetching ? "Loaging" : data.data?.name}
+        
+    </>
+  )
 }
