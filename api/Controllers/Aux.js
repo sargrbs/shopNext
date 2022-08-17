@@ -60,16 +60,19 @@ export default {
     async getAuxId(req, res){
         
         const paramsBusca = new URLSearchParams(req.query)
-        // const group = paramsBusca.get('group')
         const code = paramsBusca.get('code')
-        console.log(code)
+        const group = paramsBusca.get('group')
         try{
 
             const data = await prisma.aux.findFirst({
-                where: {code: code},
+                where: {
+                    AND:[
+                        {code: code},
+                        {group_name: group}
+                    ]
+                },
                 select: {id: true, name: true},
             })
-            console.log(data)
 
             return res.json(data)
 

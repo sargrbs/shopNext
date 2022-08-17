@@ -47,73 +47,65 @@ export default function Products() {
         }
     )
 
-    async function getAuxId(code){
-        const getId = await axios.get(`${url}getAuxId/?code=${code}`)
+    async function getAuxId(code, group){
+        const getId = await axios.get(`${url}getAuxId/?code=${code}&group=${group}`)
         return getId.data.id
     }
 
-    async function getAuxName(code){
-        const getId = await axios.get(`${url}getAuxId/?code=${code}`)
+    async function getAuxName(code, group){
+        const getId = await axios.get(`${url}getAuxId/?code=${code}&group=${group}`)
 
         return getId.data.name
     }
     
     async function createProduct(){
         const productId = uuidv4()
-        const variationId = uuidv4()
-
-        const variations =  data.data.grid?.dados != null ? 
             
-           await Promise.all(data.data.grid.dados.lista?.map( async (product, index)  => 
+        await Promise.all(data.data.grid.dados.lista?.map( async (product, index)  => 
                
-           {
-                let colorName = await getAuxName(product.codigoCor)
-                let weightName = await getAuxName(product.codigoTamanho)
+            {
+                let colorName = await getAuxName(product.codigoCor, 'cores')
+                let weightName = await getAuxName(product.codigoTamanho, 'tamanhos')
                 let variationName = colorName + '-' + weightName
-                let coresId =  await getAuxId(product.codigoCor)
-                let tamanhosId =  await getAuxId(product.codigoTamanho)
-               console.log(variationName)
-               
-               return {
-                   id:  variationId,
-                   name:  variationName,
-                   code: product.codigoCompleto,
-                   product: {
-                       connect:{
-                           id: productId
-                       }
-                   },
-                   productStock:{
-                       create: {
-                           id: uuidv4(),
-                           quantity: product.estoqueAtual
-                       }
-                   },
-                   auxs: {
-                       create: [
-                           {
-                               assignedBy: variationName,
-                               assignedAt: new Date(),
-                               aux: {
-                                   connect: coresId,
-                                   
-                               }
-                           },
-                           {
-                               assignedBy: variationName,
-                               assignedAt: new Date(),
-                               aux:{
-                                   connect: tamanhosId,
-                               }
-                           }
-                       ]
-                       
-                   },
-
-               }
-           }
-       ))
-        : null
+                let coresId =  await getAuxId(product.codigoCor, 'cores')
+                let tamanhosId =  await getAuxId(product.codigoTamanho, 'tamanhos')
+            
+                return {
+                    id:  uuidv4(),
+                    name:  variationName,
+                    code: product.codigoCompleto,
+                    productStock:{
+                        create: {
+                            id: uuidv4(),
+                            quantity: product.estoqueAtual,
+                            product: {
+                                connect: {id: productId}
+                            }
+                        }
+                    },
+                    auxs: {
+                        create: [
+                        {
+                            assignedBy: colorName + '-' + weightName,
+                            assignedAt: new Date(),
+                            aux: {
+                                connect: {id: coresId},
+                                
+                            }
+                        },
+                        {
+                            assignedBy: weightName + '-' + colorName,
+                            assignedAt: new Date(),
+                            aux:{
+                                connect: {id: tamanhosId},
+                            }
+                        }
+                    ]
+                    
+                    },
+                }
+            }
+        ))
         const product = {
             createProduct: {
                 id: productId,
@@ -139,47 +131,29 @@ export default function Products() {
                             assignedAt: new Date(),
                             aux:{
                                 connect:
-                                    {id: await getAuxId(data.data.productDetail?.dados.codigoClasse)},
+                                    {id: await getAuxId(data.data.productDetail?.dados.codigoClasse, 'classes')},
                                 
                             }
                         },
-                        // {
-                        //     assignedBy: data.data.productDetail?.dados.nome,
-                        //     assignedAt: new Date(),
-                        //     aux:{
-                        //         connect:
-                        //             {id: await getAuxId("cores")},
-                                
-                        //     }
-                        // },
                         {
                             assignedBy: data.data.productDetail?.dados.nome,
                             assignedAt: new Date(),
                             aux:{
                                 connect:
-                                    {id: await getAuxId(data.data.productDetail?.dados.codigoFabricante)},
+                                    {id: await getAuxId(data.data.productDetail?.dados.codigoFabricante, 'fabricantes')},
                                 
                             }
-                        },
-                        // {
-                        //     assignedBy: data.data.productDetail?.dados.nome,
-                        //     assignedAt: new Date(),
-                        //     aux:{
-                        //         connect:
-                        //             {id: await getAuxId("tamanhos")},
-                                
-                        //     }
-                        // }
+                        }
                     ]
                     
                 },
-            },
-
-            createVariations: variations,
+                ProductVariations: {
+                    create: variations
+                }
+            }
         }
 
-        // create(product)
-        console.log(product)
+        create(product)
     }
     return (
         <>
