@@ -10,33 +10,12 @@ export default {
                 data: createData.createProduct
             })
 
-            // if(createData.variations != null){
-            //     const create = data.map((aux) => 
-            //         prisma.productvariations.create({
-            //             data: aux
-            //         })
-                    
-            //     )
-            //     await Promise.all(create)
-            //     const finalData = await prisma.product.findFirst({
-            //         where: {
-            //             id: data.id
-            //         },
-            //         include:{
-            //             productvariations: true
-            //         }
-            //     })
-
-            //     return res.json(finalData)
-            // }
-           
-
             return res.json(data)
 
         }catch(error){
 
             console.log(error)
-            return res.json(error)
+            return res.status(500).json(error)
         }
     }
 }

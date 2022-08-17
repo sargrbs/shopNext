@@ -42,7 +42,7 @@ export default function Products() {
         },
         onError: (err) => {
             console.log(err)
-            showToast(`Erro ao adicionar produto / ${err}`, 'Erro ao Importar', false, true)
+            showToast(`Erro ao adicionar produto / Code: ${err.response.data.code}`, 'Erro ao Importar', false, true)
         },
         }
     )
@@ -61,7 +61,7 @@ export default function Products() {
     async function createProduct(){
         const productId = uuidv4()
             
-        await Promise.all(data.data.grid.dados.lista?.map( async (product, index)  => 
+        const variations = await Promise.all(data.data.grid.dados.lista?.map( async (product, index)  => 
                
             {
                 let colorName = await getAuxName(product.codigoCor, 'cores')
@@ -152,7 +152,63 @@ export default function Products() {
                 }
             }
         }
+        create(product)
+    }
 
+    async function createProductSingle(){
+
+        const totalStock = data.data.product?.dados.estoqueFiliais?.map(filial => Number(filial.estoqueAtual)).reduce((prev, curr) => prev + curr, 0)
+        
+        const product = {
+            createProduct: {
+                id: uuidv4(),
+                code_default: Number(data.data.productDetail?.dados.codigo),
+                name: data.data.productDetail?.dados.nome,
+                type: data.data.productDetail?.dados.tipo,
+                gtin: data.data.productDetail?.dados.codigoBarras,
+                nettWeight: data.data.productDetail?.dados.pesoLiquido,
+                grossWeight: data.data.productDetail?.dados.pesoBruto,
+                height: data.data.productDetail?.dados.altura,
+                width: data.data.productDetail?.dados.largura,
+                length: data.data.productDetail?.dados.comprimento,
+                currentsupply: data.data.productDetail?.dados.estoqueAtual,
+                detailurl:  data.data.productDetail?.dados.urlDetalhe,
+                urldetailstock: data.data.productDetail?.dados.urlEstoqueDetalhe,
+                urlpricetable: data.data.productDetail?.dados.urlTabelaPreco,
+                urloffers: data.data.productDetail?.dados.urlPromocoes,
+                urlpics: data.data.productDetail?.dados.urlFotos,
+                auxs: {
+                    create: [
+                        {
+                            assignedBy: data.data.productDetail?.dados.nome,
+                            assignedAt: new Date(),
+                            aux:{
+                                connect:
+                                    {id: await getAuxId(data.data.productDetail?.dados.codigoClasse, 'classes')},
+                                
+                            }
+                        },
+                        {
+                            assignedBy: data.data.productDetail?.dados.nome,
+                            assignedAt: new Date(),
+                            aux:{
+                                connect:
+                                    {id: await getAuxId(data.data.productDetail?.dados.codigoFabricante, 'fabricantes')},
+                                
+                            }
+                        }
+                    ]
+                },
+                ProductStock: {
+                    create:{
+                        id: uuidv4(),
+                        quantity: totalStock
+                    }
+                }
+
+            }
+        }
+        console.log(product)
         create(product)
     }
     return (
@@ -182,7 +238,8 @@ export default function Products() {
                                 </InputGroup>
                             </Col>
                             <Col md="7">
-                                <Button onClick={createProduct}>Salvar Produto</Button>
+                                {!isFetched ? null :
+                                <Button onClick={data.data.grid?.dados === null ? createProductSingle : createProduct }>Salvar Produto</Button>}
                             </Col>
                         </Row>
                         <Row>

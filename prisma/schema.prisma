@@ -93,7 +93,7 @@ model ProductOnAux {
 
 model Product {
   id String @unique
-  code_default Int?
+  code_default Int? @unique
   name String
   type Int?
   gtin String?
@@ -110,7 +110,7 @@ model Product {
   urloffers String?
   urlpics String?
 
-  web_erp_code String?
+  web_erp_code String? @unique
   
   ProductVariations ProductVariations[]
   
