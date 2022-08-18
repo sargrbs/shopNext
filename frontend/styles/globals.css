@@ -23,3 +23,7 @@ a {
 #__next{
   padding: 20px;
 }
+
+.table-dark {text-align: center; min-height: 150px;}
+.table-dark td {vertical-align: middle;}
+.table-dark th {vertical-align: middle;}

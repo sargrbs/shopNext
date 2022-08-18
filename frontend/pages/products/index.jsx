@@ -4,6 +4,8 @@ import axios from 'axios'
 import {Container, Row, Col, Table, Button, Form} from 'react-bootstrap'
 import Header from '../modules/Header'
 import {useQuery} from '@tanstack/react-query'
+import GetPriceItem from '../components/GetPriceItem'
+import AuxName from '../components/AuxName'
 
 async function getData({queryKey}){
   const page = queryKey[1]
@@ -27,15 +29,19 @@ export default function Products() {
 
     setPage(p)
   }
+
+  console.log(data)
   return (
     <>
      <Container>
       <Row>
-          <Col md='2'>
+        <Col md='12'>
             <Header/>
-          </Col>
-          
-          <Col md="10">
+        </Col>
+      </Row>
+      <Row>
+          <Col md="12">
+            <h2 style={{borderBottom: "2px solid rgb(89, 44, 44)", paddingBottom: 5}}>Produtos</h2>
             <Button variant="warning" onClick={previousPage} disabled={page === 1 ? true : false}>Anterior</Button>{' '}
             <Button onClick={nextPage} disabled={data?.tipo === 'FIM_DE_PAGINA' ? true : false}>Próximo</Button>
             <Table responsive striped bordered hover variant="dark">
@@ -51,9 +57,7 @@ export default function Products() {
                   <th>codigoFamilia</th> 
                   <th>codigoGrupo</th> 
                   <th>codigoMoeda</th> 
-                  <th>codigoPesquisa1</th> 
-                  <th>codigoPesquisa2</th> 
-                  <th>codigoPesquisa3</th> 
+                  
                   <th>codigoSubclasse</th> 
                   <th>codigoUnidadeVenda</th> 
                   <th>comprimento</th> 
@@ -61,22 +65,14 @@ export default function Products() {
                   <th>inativo</th> 
                   <th>largura</th> 
                   <th>altura</th> 
-                  <th>nomeSite</th> 
-                  <th>observacao1</th> 
-                  <th>observacao2</th> 
-                  <th>observacao3</th> 
-                  <th>ordem</th> 
-                  <th>pesoBruto</th>
-                  <th>pesoLiquido</th>
-                  <th>precos</th>
+                  <th>nomeSite</th>
+                  <th>ordem</th>
                   <th>tipo</th> 
                   <th>urlDetalhe</th> 
                   <th>urlEstoqueDetalhe</th> 
                   <th>urlFotos</th>
                   <th>urlPromocoes</th>
-                  <th>urlTabelaPreco</th> 
-                  <th>webObs1</th> 
-                  <th>webObs2</th>
+                  <th>urlTabelaPreco</th>
                 </tr>
               </thead>
               <tbody>
@@ -90,45 +86,26 @@ export default function Products() {
                         <td>{product.nome}</td> 
                         <td>{product.codigo}</td> 
                         <td>{product.codigoBarras}</td> 
-                        <td>{product.codigoClasse}</td> 
-                        <td>{product.codigoFabricante}</td> 
-                        <td>{product.codigoFamilia}</td> 
-                        <td>{product.codigoGrupo}</td> 
-                        <td>{product.codigoMoeda}</td> 
-                        <td>{product.codigoPesquisa1}</td> 
-                        <td>{product.codigoPesquisa2}</td> 
-                        <td>{product.codigoPesquisa3}</td> 
-                        <td>{product.codigoSubclasse}</td> 
-                        <td>{product.codigoUnidadeVenda}</td> 
+                        <td><AuxName group="classes" code={product.codigoClasse} queryName={`classe${product.codigoClasse}`}/></td> 
+                        <td><AuxName group="fabricantes" code={product.codigoFabricante} queryName={`fabricantes${product.codigoFabricante}`}/></td> 
+                        <td><AuxName group="familias" code={product.codigoFamilia} queryName={`familia${product.codigoFamilia}`}/></td> 
+                        <td><AuxName group="grupos" code={product.codigoGrupo} queryName={`grupo${product.codigoGrupo}`}/></td> 
+                        <td><AuxName group="moedas" code={product.codigoMoeda} queryName={`moeda${product.codigoMoeda}`}/></td>
+                        <td><AuxName group="subclasses" code={product.codigoSubclasse} queryName={`subclasse${product.codigoSubclasse}`}/></td> 
+                        <td><AuxName group="unidades_venda" code={product.codigoUnidadeVenda} queryName={`unidadevenda${product.codigoUnidadeVenda}`}/></td> 
                         <td>{product.comprimento}</td> 
                         <td>{product.estoqueAtual}</td> 
                         <td>{product.inativo}</td> 
                         <td>{product.largura}</td> 
                         <td>{product.altura}</td> 
-                        <td>{product.nomeSite}</td> 
-                        <td>{product.observacao1}</td> 
-                        <td>{product.observacao2}</td> 
-                        <td>{product.observacao3}</td> 
-                        <td>{product.ordem}</td> 
-                        <td>{product.pesoBruto}</td>
-                        <td>{product.pesoLiquido}</td>
-                        <td>{product.precos?.map((preco, index) => {
-                          return (
-                            <div key={index}>
-                              <span>{preco.tabela}</span>
-                              <span>{preco.preco}</span>
-                              <span>{preco.promocional}</span>
-                            </div>
-                          )
-                        })}</td>
+                        <td>{product.nomeSite}</td>
+                        <td>{product.ordem}</td>
                         <td>{product.tipo}</td> 
                         <td>{product.urlDetalhe}</td> 
                         <td>{product.urlEstoqueDetalhe}</td> 
                         <td>{product.urlFotos}</td>
                         <td>{product.urlPromocoes}</td>
-                        <td>{product.urlTabelaPreco}</td> 
-                        <td>{product.webObs1}</td> 
-                        <td>{product.webObs2}</td>
+                        <td><GetPriceItem url={product.urlTabelaPreco}/></td>
                       </tr>
                    )
                 })}

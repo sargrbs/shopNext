@@ -62,13 +62,14 @@ export default function Aux() {
             <Container>
                 <ToastSuccess />
                 <ToastError />
-                
                 <Row>
-                    <Col md='2'>
+                    <Col md='12'>
                         <Header/>
                     </Col>
-                    
-                    <Col md="10">
+                </Row>
+                <Row>
+                    <Col md="12">
+                        <h2 style={{borderBottom: "2px solid rgb(89, 44, 44)", paddingBottom: 5}}>Importar Auxiliares do Shop 9</h2>
                         <Row>
                             <Col md="5">
                                 <InputGroup style={{marginBottom: 10}}>
@@ -88,29 +89,31 @@ export default function Aux() {
                                 <Button variant="success" onClick={addAux}>Salvar Itens</Button>
                             </Col>
                         </Row>
-                        <Table responsive striped bordered hover variant="dark">
-                        <thead>
-                            <tr>
-                            <th>#</th>
-                            <th>Nome</th>
-                            <th>Código</th>
-                            
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {isFetching ? <tr><td colSpan={34}>Loading</td></tr> :
-                            data.dados === null ? <tr><td colSpan={34}>{data?.mensagem}</td></tr> :
-                            data.dados?.map((aux, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{aux.nome}</td>
-                                    <td>{aux.codigo}</td>
-                                </tr>
-                            )
-                            })}
-                        </tbody>
-                        </Table>
+                        {isFetched ? 
+                            <Table responsive striped bordered hover variant="dark">
+                                <thead>
+                                    <tr>
+                                    <th>#</th>
+                                    <th>Nome</th>
+                                    <th>Código</th>
+                                    
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {isFetching ? <tr><td colSpan={34}>Loading</td></tr> :
+                                    data.dados === null ? <tr><td colSpan={34}>{data?.mensagem}</td></tr> :
+                                    data.dados?.map((aux, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>{aux.nome}</td>
+                                            <td>{aux.codigo}</td>
+                                        </tr>
+                                    )
+                                    })}
+                                </tbody>
+                            </Table>
+                        : null}
                     </Col>
                 </Row>
             </Container>

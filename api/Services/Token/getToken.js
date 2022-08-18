@@ -3,6 +3,9 @@ import prisma from "../../Database/prisma";
 import {v4 as uuidv4} from 'uuid';
 import moment from "moment";
 
+export const shopUrl = process.env.SHOP_URL
+
+
 export default async function getToken(){
        
     try{
@@ -13,7 +16,7 @@ export default async function getToken(){
             const dateToken = moment(token.expireAt).format("DD/MM/YYYY")
 
             if(dateToken < date){
-                const fetchToken = await axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/auth/?serie=HIEAPA-600759-ROCT&codfilial=1`)
+                const fetchToken = await axios.get(`${shopUrl}/auth/?serie=HIEAPA-600759-ROCT&codfilial=1`)
 
                 const dataToken = fetchToken.data.dados.token
 
@@ -37,9 +40,10 @@ export default async function getToken(){
                 return ({success: true, getToken})
             }
         }else{
-            const fetchToken = await axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/auth/?serie=HIEAPA-600759-ROCT&codfilial=1`)
+            const fetchToken = await axios.get(`${shopUrl}/auth/?serie=HIEAPA-600759-ROCT&codfilial=1`)
 
             const dataToken = fetchToken.data.dados.token
+            
             const expireAt = fetchToken.data.dados.expireAt
             try{
                 const createToken = await prisma.token.create({

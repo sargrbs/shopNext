@@ -59,7 +59,7 @@ export default function AlertDelete(props) {
                
             </Modal>
             
-            <Button variant="danger" onClick={handleShow}>
+            <Button variant="danger" onClick={handleShow} style={props.color ? {color: `#${props.color}`} : null} className={props.class ? props.class : null}>
                 Deletar
             </Button>
         </>

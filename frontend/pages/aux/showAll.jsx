@@ -25,46 +25,49 @@ export default function Aux() {
         <>
             <ToastSuccess/>
             <ToastError/>
+            
             <Container>
                 <Row>
-                    <Col md='2'>
+                    <Col md='12'>
                         <Header/>
                     </Col>
-
-                    <Col md="10">
+                </Row>
+                <Row>
+                    <Col md="12">
+                        <h2 style={{borderBottom: "2px solid rgb(89, 44, 44)", paddingBottom: 5}}>Auxiliares do Shop 9</h2>
                         <Table responsive striped bordered hover variant="dark">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Nome</th>
-                                <th>Grupo</th>
-                                <th>Código</th>
-                                <th>Deletar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {isFetching ? <tr><td colSpan={34}><Spinner animation="border" variant="primary" /></td></tr> :
-                            data.data.length === 0 ? <tr><td colSpan={34}>Nenhum dado Encontrado</td></tr> :
-                                data.data?.map((aux, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td>{aux.name}</td>
-                                        <td>{aux.group_name}</td>
-                                        <td>{aux.code}</td>
-                                        <td>
-                                            <AlertDelete 
-                                                item={`${aux.name}`} 
-                                                url={urlDelete} 
-                                                id={aux.id} 
-                                                queryInvalidate='showAllaux' 
-                                            />
-                                        </td>
-                                    </tr>
-                                )
-                                })
-                            }
-                        </tbody>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nome</th>
+                                    <th>Grupo</th>
+                                    <th>Código</th>
+                                    <th>Deletar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {isFetching ? <tr><td colSpan={34}><Spinner animation="border" variant="primary" /></td></tr> :
+                                data.data.length === 0 ? <tr><td colSpan={34}>Nenhum dado Encontrado</td></tr> :
+                                    data.data?.map((aux, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>{aux.name}</td>
+                                            <td>{aux.group_name}</td>
+                                            <td>{aux.code}</td>
+                                            <td>
+                                                <AlertDelete 
+                                                    item={`${aux.name}`} 
+                                                    url={urlDelete} 
+                                                    id={aux.id} 
+                                                    queryInvalidate='showAllaux' 
+                                                />
+                                            </td>
+                                        </tr>
+                                    )
+                                    })
+                                }
+                            </tbody>
                         </Table>
                     </Col>
                 </Row>

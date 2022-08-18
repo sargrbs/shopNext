@@ -36,7 +36,7 @@ model ProductStock {
   productVariations ProductVariations?
 
   productId String 
-  product Product @relation(fields: [productId], references: [id], onDelete: SetNull)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model ProductVariations {
@@ -50,7 +50,7 @@ model ProductVariations {
   productStockId String  @unique
   productStock ProductStock @relation(fields: [productStockId], references: [id], onDelete: Cascade)
   
-  product Product @relation(fields: [productId], references: [id], onDelete: SetNull)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
 
   auxs VariationtOnAux[]
@@ -81,9 +81,9 @@ model VariationtOnAux {
 
 
 model ProductOnAux {
-  product       Product   @relation(fields: [productId], references: [id])
+  product       Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId     String
-  aux   Aux @relation(fields: [auxId], references: [id])
+  aux   Aux @relation(fields: [auxId], references: [id], onDelete: Cascade)
   auxId String
   assignedAt DateTime @default(now())
   assignedBy String
@@ -99,11 +99,11 @@ model Product {
   gtin String?
   nettWeight  Decimal?  @db.Decimal(15,2)	//peso liquido
   grossWeight Decimal?  @db.Decimal(15,2)	//peso bruto
-  height Decimal?  @db.Decimal(15,2)	
-  width Decimal?  @db.Decimal(15,2)	
-  length Decimal?  @db.Decimal(15,2)	
-  currentsupply Decimal?  @db.Decimal(15,2)	
-
+  height Decimal?  @db.Decimal(15,2)
+  width Decimal?  @db.Decimal(15,2)
+  length Decimal?  @db.Decimal(15,2)
+  currentsupply Decimal?  @db.Decimal(15,2)
+  price Decimal?  @db.Decimal(15,2)
   detailurl String?
   urldetailstock String?
   urlpricetable String?
@@ -117,19 +117,6 @@ model Product {
   auxs ProductOnAux[]
 
   ProductStock ProductStock[]
-
-  // codigoFabricante Int
-  // codigoClasse Int
-  // codigoSubclasse Int
-  // codigoCor Int
-  // codigoTamanho Int
-  // codigoGrupo Int
-  // codigoMoeda Int
-  // codigoFamilia Int
-  // codigoUnidadeVenda Int
-  // codigoPesquisa1 Int
-  // codigoPesquisa2 Int
-  // codigoPesquisa3 Int
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

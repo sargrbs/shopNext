@@ -10,6 +10,7 @@ import {v4 as uuidv4} from 'uuid'
 import useToast from '../components/HookToast'
 import ToastSuccess from '../components/ToastSuccess'
 import ToastError from '../components/ToastError'
+import usePrice from '../components/PriceContext'
 
 async function getData({queryKey}){
   const code = queryKey[1]
@@ -21,18 +22,19 @@ async function getData({queryKey}){
 
 export default function Products() {
     const url = process.env.AXIOS_URL
+
+    const {itemPrice} = usePrice()
     
     const {showToast} = useToast()
 
     const [code, setCode] = useState("")
+    
     const {data, isFetching, refetch, isFetched} = useQuery(['product', code], getData, {refetchOnWindowFocus: false, enabled: false})
     
 
     function searchItem(){
         refetch()
     }
-    
-    console.log(data, isFetched)
 
     const { mutate: create} = useMutation(
         async (data) => { return axios.post(`${url}createProduct`, data) },
@@ -124,6 +126,7 @@ export default function Products() {
                 urlpricetable: data.data.productDetail?.dados.urlTabelaPreco,
                 urloffers: data.data.productDetail?.dados.urlPromocoes,
                 urlpics: data.data.productDetail?.dados.urlFotos,
+                price: itemPrice,
                 auxs: {
                     create: [
                         {
@@ -177,6 +180,7 @@ export default function Products() {
                 urlpricetable: data.data.productDetail?.dados.urlTabelaPreco,
                 urloffers: data.data.productDetail?.dados.urlPromocoes,
                 urlpics: data.data.productDetail?.dados.urlFotos,
+                price: itemPrice,
                 auxs: {
                     create: [
                         {
@@ -215,13 +219,16 @@ export default function Products() {
         <>
             <ToastSuccess/>
             <ToastError />
+            <Row>
+                <Col md='12'>
+                    <Header/>
+                </Col>
+            </Row>
             <Container>
                 <Row>
-                    <Col md='2'>
-                        <Header/>
-                    </Col>
-                    
-                    <Col md="10">
+                    <Col md="12">
+                        <h2 style={{borderBottom: "2px solid rgb(89, 44, 44)", paddingBottom: 5}}>Importar Produto do Shop 9</h2>
+
                         <Row>
                             <Col md="5">
                                 <InputGroup style={{marginBottom: 10}}>
@@ -251,75 +258,37 @@ export default function Products() {
                                             <th>nome</th> 
                                             <th>codigo</th> 
                                             <th>codigoBarras</th> 
-                                            <th>codigoClasse</th> 
-                                             <th>codigoFabricante</th> 
-                                            {/*<th>codigoFamilia</th> 
-                                            <th>codigoGrupo</th> 
-                                            <th>codigoMoeda</th> 
-                                            <th>codigoPesquisa1</th> 
-                                            <th>codigoPesquisa2</th> 
-                                            <th>codigoPesquisa3</th> 
-                                            <th>codigoSubclasse</th>  */}
-                                            <th>codigoUnidadeVenda</th> 
-                                            <th>comprimento</th> 
-                                            {/* <th>estoqueAtual</th>  */}
-                                            <th>inativo</th> 
-                                            <th>largura</th> 
-                                            <th>altura</th> 
-                                            <th>nomeSite</th> 
-                                            {/* <th>observacao1</th> 
-                                            <th>observacao2</th> 
-                                            <th>observacao3</th>  */}
-                                            <th>ordem</th> 
-                                            <th>pesoBruto</th>
-                                            <th>pesoLiquido</th>
-                                            <th>tipo</th> 
-                                            {/* <th>urlPromocoes</th> */}
                                             <th>TabelaPreco</th> 
-                                            {/* <th>webObs1</th> 
-                                            <th>webObs2</th> */}
+                                            <th>codigoClasse</th> 
+                                            <th>codigoFabricante</th> 
+                                            <th>codigoUnidadeVenda</th>
+                                            <th>inativo</th>
+                                            <th>nomeSite</th> 
+                                            <th>ordem</th> 
+                                            <th>tipo</th> 
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {!isFetched ? <tr><td colSpan={34}>Loading</td></tr> :
-                                        data.data.productDetail?.dados === null ? <tr><td colSpan={34}>{data.data.productDetail?.mensagem}</td></tr> :
+                                            data.data.productDetail?.dados === null ? <tr><td colSpan={34}>{data.data.productDetail?.mensagem}</td></tr> :
                                         
                                             <tr>
                                                 <td>{data.data.productDetail?.dados.nome}</td> 
                                                 <td>{data.data.productDetail?.dados.codigo}</td> 
                                                 <td>{data.data.productDetail?.dados.codigoBarras}</td> 
+                                                <td><GetPriceItem url={data.data.productDetail?.dados.urlTabelaPreco}/></td>
                                                 <td><AuxName group="classes" code={data.data.productDetail?.dados.codigoClasse} queryName={`classe${data.data.productDetail?.dados.codigoClasse}`}/></td> 
-                                                 <td><AuxName group="fabricantes" code={data.data.productDetail?.dados.codigoFabricante} queryName={`fabricante${data.data.productDetail?.dados.codigoFabricante}`} /> </td> 
-                                                {/*<td>{data.data.productDetail?.dados.codigoFamilia}</td> 
-                                                <td>{data.data.productDetail?.dados.codigoGrupo}</td> 
-                                                <td>{data.data.productDetail?.dados.codigoMoeda}</td> 
-                                                <td>{data.data.productDetail?.dados.codigoPesquisa1}</td> 
-                                                <td>{data.data.productDetail?.dados.codigoPesquisa2}</td> 
-                                                <td>{data.data.productDetail?.dados.codigoPesquisa3}</td> 
-                                                <td>{data.data.productDetail?.dados.codigoSubclasse}</td>  */}
-                                                <td><AuxName group="unidades_venda" code={data.data.productDetail?.dados.codigoUnidadeVenda} queryName={`unidade${data.data.productDetail?.dados.codigoUnidadeVenda}`}/></td> 
-                                                <td>{data.data.productDetail?.dados.comprimento}</td> 
-                                                {/* <td>{data.data.productDetail?.dados.estoqueAtual}</td>  */}
-                                                <td>{data.data.productDetail?.dados.inativo}</td> 
-                                                <td>{data.data.productDetail?.dados.largura}</td> 
-                                                <td>{data.data.productDetail?.dados.altura}</td> 
-                                                <td>{data.data.productDetail?.dados.nomeSite}</td> 
-                                                {/* <td>{data.data.productDetail?.dados.observacao1}</td> 
-                                                <td>{data.data.productDetail?.dados.observacao2}</td> 
-                                                <td>{data.data.productDetail?.dados.observacao3}</td>  */}
-                                                <td>{data.data.productDetail?.dados.ordem}</td> 
-                                                <td>{data.data.productDetail?.dados.pesoBruto}</td>
-                                                <td>{data.data.productDetail?.dados.pesoLiquido}</td>
+                                                <td><AuxName group="fabricantes" code={data.data.productDetail?.dados.codigoFabricante} queryName={`fabricante${data.data.productDetail?.dados.codigoFabricante}`} /> </td> 
+                                                <td><AuxName group="unidades_venda" code={data.data.productDetail?.dados.codigoUnidadeVenda} queryName={`unidade${data.data.productDetail?.dados.codigoUnidadeVenda}`}/></td>
+                                                <td>{data.data.productDetail?.dados.inativo}</td>
+                                                <td>{data.data.productDetail?.dados.nomeSite}</td>
+                                                <td>{data.data.productDetail?.dados.ordem}</td>
                                                 <td>{data.data.productDetail?.dados.tipo}</td>
-                                                {/* <td>{data.data.productDetail?.dados.urlPromocoes}</td> */}
-                                                <td><GetPriceItem url={data.data.productDetail?.dados.urlTabelaPreco}/></td> 
-                                                {/* <td>{data.data.productDetail?.dados.webObs1}</td> 
-                                                <td>{data.data.productDetail?.dados.webObs2}</td> */}
                                             </tr>
                                         
                                         }
                                     </tbody>
-                                    </Table>
+                                </Table>
                             </Col>
                         </Row>
                         <Row>

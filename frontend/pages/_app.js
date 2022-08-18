@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-query'
 import {Container, Navbar} from 'react-bootstrap'
 import {ToastProvider} from '../pages/components/ToastContext'
+import {PriceProvider} from '../pages/components/PriceContext'
 
 // Create a client for react-query
 const queryClient = new QueryClient()
@@ -13,15 +14,10 @@ const queryClient = new QueryClient()
 function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
-        <Navbar bg="dark" variant="dark" style={{marginBottom: 20}}>
-          <Container>
-            <Navbar.Brand href="/" >
-              API SHOP 9 
-            </Navbar.Brand>
-          </Container>
-        </Navbar>
         <ToastProvider>
-          <Component {...pageProps} />
+          <PriceProvider>
+            <Component {...pageProps} />
+          </PriceProvider>
         </ToastProvider>
     </QueryClientProvider>
   )

@@ -2,6 +2,8 @@ import axios from "axios";
 import getToken from '../Token/GetToken';
 import signature from "../Token/GetSignature";
 
+export const shopUrl = process.env.SHOP_URL
+
 export default {
     async getProducts(req, res){
         try{
@@ -20,7 +22,7 @@ export default {
 
                 const {page} = req.params
 
-                await axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/produtos/${page}`, {headers: headers})
+                await axios.get(`${shopUrl}/produtos/${page}`, {headers: headers})
                 .then(function (response) {
                     return res.json(response.data)
                 })
@@ -50,11 +52,11 @@ export default {
 
                 const {code} = req.params
 
-                const grid =  await axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/estoque/${code}/grade/`, {headers: headers})
+                const grid =  await axios.get(`${shopUrl}/estoque/${code}/grade/`, {headers: headers})
                                            
-                const product =  await  axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/estoque/${code}`, {headers: headers})
+                const product =  await  axios.get(`${shopUrl}/estoque/${code}`, {headers: headers})
                
-                const productDetail =  await  axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/produtos/detalhes/${code}`, {headers: headers})
+                const productDetail =  await  axios.get(`${shopUrl}/produtos/detalhes/${code}`, {headers: headers})
                                                        
                 const data = {grid:  grid.data, product: product.data, productDetail: productDetail.data}
 
@@ -84,7 +86,7 @@ export default {
 
                 const url = paramsBusca.get('url')
                
-                const result =  await axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500${url}`, {headers: headers})
+                const result =  await axios.get(`${shopUrl}${url}`, {headers: headers})
                 
                 const data = {result:  result.data}
 

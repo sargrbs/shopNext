@@ -12,21 +12,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-
       <Container>
-        <Row>
-            <Col md='2'>
-              <Header/>
-            </Col>
-            
-            <Col md="10">
-              <h1 className={styles.title}>
-                Welcome to Shop 9 API
-              </h1>
-            </Col>
-        </Row>
-      </Container>
+          <Row>
+            <Header/>
+          </Row>
+        </Container>
+      
+      <main className={styles.main}>
+        <Container>
+          <Row>
+              <Col md="12">
+                <h1 className={styles.title}>
+                  Welcome to Shop 9 API
+                </h1>
+              </Col>
+          </Row>
+        </Container>
        
 
       </main>

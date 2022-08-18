@@ -3,6 +3,8 @@ import getToken from '../Token/GetToken';
 import signature from "../Token/GetSignature";
 import {v4 as uuidv4} from 'uuid';
 
+export const shopUrl = process.env.SHOP_URL
+
 export default {
     async getAux(req, res){
         try{
@@ -23,7 +25,7 @@ export default {
 
                 const aux = paramsBusca.get('aux')
                 
-                await axios.get(`http://idealsoftexportaweb.eastus.cloudapp.azure.com:60500/aux/${aux}`, {headers: headers})
+                await axios.get(`${shopUrl}/aux/${aux}`, {headers: headers})
                 .then(function (response) {
                     return res.json(response.data)
                 })
