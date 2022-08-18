@@ -3,9 +3,14 @@ import styles from '../../styles/products/Products.module.css'
 import axios from 'axios'
 import {Container, Row, Col, Table, Button, Form} from 'react-bootstrap'
 import Header from '../modules/Header'
-import {useQuery} from '@tanstack/react-query'
+import {useQuery, useMutation} from '@tanstack/react-query'
 import GetPriceItem from '../components/GetPriceItem'
 import AuxName from '../components/AuxName'
+import createManyItens from './components/createManyItens'
+import useToast from '../components/HookToast'
+import ToastSuccess from '../components/ToastSuccess'
+import ToastError from '../components/ToastError'
+
 
 async function getData({queryKey}){
   const page = queryKey[1]
@@ -15,8 +20,12 @@ async function getData({queryKey}){
 }
 
 export default function Products() {
- 
+  const url = process.env.AXIOS_URL
+  
+  const {showToast} = useToast()
+
   const [page, setPage] = useState(1)
+
   const {data, isFetching} = useQuery(['products', page], getData, {refetchOnWindowFocus: false,})
 
   function nextPage(){
@@ -30,9 +39,49 @@ export default function Products() {
     setPage(p)
   }
 
-  console.log(data)
+  const { mutate: create} = useMutation(
+    async (data) => { return axios.post(`${url}createManyProducts`, data) },
+    {
+    onSuccess: (res) => {
+        showToast(`Sucesso ao adicionar Produto ${res.data.name}`, 'Produto adicionado', true, false)
+    },
+    onError: (err) => {
+        console.log(err)
+        showToast(`Erro ao adicionar produto / Code: ${err.response.data.code}`, 'Erro ao Importar', false, true)
+    },
+    }
+  )
+
+  const createMany = []
+
+  //Create array with products to save
+  async function saveProducts(){
+    await Promise.all(data.dados?.map( async (p, index) => {
+      const product = await createManyItens({code: p.codigo, type: p.tipo})
+      createMany.push(product)
+    }))
+    create({createMany})
+    console.log(createMany)
+  }
+
+  const arrayProducts = []
+
+  function handleSelect(e){
+    const datacode = e.target.getAttribute("data-code")
+    const datatype = e.target.getAttribute("data-type")
+
+    const product = {code: datacode, type: datatype}
+
+    arrayProducts.push(product)
+  }
+
+  console.log(arrayProducts)
+  
+
   return (
     <>
+      <ToastSuccess/>
+      <ToastError />
      <Container>
       <Row>
         <Col md='12'>
@@ -43,7 +92,8 @@ export default function Products() {
           <Col md="12">
             <h2 style={{borderBottom: "2px solid rgb(89, 44, 44)", paddingBottom: 5}}>Produtos</h2>
             <Button variant="warning" onClick={previousPage} disabled={page === 1 ? true : false}>Anterior</Button>{' '}
-            <Button onClick={nextPage} disabled={data?.tipo === 'FIM_DE_PAGINA' ? true : false}>Próximo</Button>
+            <Button onClick={nextPage} disabled={data?.tipo === 'FIM_DE_PAGINA' ? true : false}>Próximo</Button>{' '}
+            <Button variant="success" onClick={saveProducts}>Importar Produtos</Button>
             <Table responsive striped bordered hover variant="dark">
               <thead>
                 <tr>
@@ -79,10 +129,18 @@ export default function Products() {
                 {isFetching ? <tr><td colSpan={34}>Loading</td></tr> :
                 data.dados === null ? <tr><td colSpan={34}>{data?.mensagem}</td></tr> :
                   data.dados?.map((product, index) => {
-                   return (
+
+                    return (
                       <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td><Form.Check aria-label={product.codigo} /></td>
+                        <td>{index + 1}</td> 
+                        <td>
+                          <Form.Check  
+                            data-code={product.codigo} 
+                            data-type={product.tipo} 
+                            aria-label={product.codigo} 
+                            onChange={handleSelect} 
+                          />
+                        </td>
                         <td>{product.nome}</td> 
                         <td>{product.codigo}</td> 
                         <td>{product.codigoBarras}</td> 
@@ -108,7 +166,7 @@ export default function Products() {
                         <td><GetPriceItem url={product.urlTabelaPreco}/></td>
                       </tr>
                    )
-                })}
+                  })}
               </tbody>
             </Table>
           </Col>

@@ -22,6 +22,7 @@ router.get("/getAux", ServiceAux.getAux) //Import aux using shop 9 api
 
 //CONTROLLERS
 router.post("/createProduct", ControllerProducts.createProduct)
+router.post("/createManyProducts", ControllerProducts.createMany)
 router.get("/getProducts", ControllerProducts.getProducts)
 router.delete("/deleteProduct/:id", ControllerProducts.deleteProduct)
 

@@ -55,6 +55,7 @@ export default async function getToken(){
                 })
                 const getToken = createToken.token
                 return ({success: true, getToken})
+                
             }catch(error){
                 console.log(error)
                 return (error)

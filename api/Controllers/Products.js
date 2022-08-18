@@ -19,6 +19,30 @@ export default {
         }
     },
 
+    async createMany(req, res) {
+        try {
+            const data = req.body
+            
+            const create = data.createMany.map((prod) => 
+                prisma.product.create({
+                    data: prod.createProduct
+                })
+                
+            )
+            
+            const total = await Promise.all(create)
+            
+
+            console.log(total)
+            
+            return res.json(create)
+
+        } catch (error) {
+            console.log(error)
+            return res.json(error)
+        }
+    },
+
     async getProducts(req, res){
         try{
             const data = await prisma.product.findMany({
