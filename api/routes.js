@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import ServiceProducts from './Services/Products/Products';
 import ServiceAux from './Services/Products/ProductAux';
+import ServiceClients from './Services/Clients/Clients';
 import ControllerAux from './Controllers/Aux'
 import ControllerProducts from './Controllers/Products'
 
@@ -12,20 +13,23 @@ router.get("/", (req, res) => {
 
 
 // SERVICES
-//Routes to get products from Shop 9
-router.get("/getProducts/:page", ServiceProducts.getProducts)
-router.get("/getProduct/:code", ServiceProducts.getProduct)
-//Route to get items seting the url 
-router.get("/getByUrl", ServiceProducts.getByUrl)
-//Routes to get "Aux from Shop 9
-router.get("/getAux", ServiceAux.getAux) //Import aux using shop 9 api
+    //Routes to get products from Shop 9
+    router.get("/getProducts/:page", ServiceProducts.getProducts)
+    router.get("/getProduct/:code", ServiceProducts.getProduct)
+    //Route to get items seting the url 
+    router.get("/getByUrl", ServiceProducts.getByUrl)
+    //Routes to get "Aux from Shop 9
+    router.get("/getAux", ServiceAux.getAux) //Import aux using shop 9 api
+    ////Clients
+    router.post("/createClient", ServiceClients.create)
 
 //CONTROLLERS
-router.post("/createProduct", ControllerProducts.createProduct)
-router.post("/createManyProducts", ControllerProducts.createMany)
-router.get("/getProducts", ControllerProducts.getProducts)
-router.delete("/deleteProduct/:id", ControllerProducts.deleteProduct)
-
+    //Products
+    router.post("/createProduct", ControllerProducts.createProduct)
+    router.post("/createManyProducts", ControllerProducts.createMany)
+    router.get("/getProducts", ControllerProducts.getProducts)
+    router.delete("/deleteProduct/:id", ControllerProducts.deleteProduct)
+    
 
 router.post("/createAux", ControllerAux.createAux)
 router.get("/getAllAux", ControllerAux.getAll) // Get all aux imported

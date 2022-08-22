@@ -1,0 +1,18 @@
+.filters {
+    display: flex;
+    justify-content: center;
+}
+.filters .date {
+    display: flex;
+}
+.date .react-datepicker-wrapper{
+    padding-right: 50px;
+}
+
+.date .react-datepicker-wrapper{
+    padding-right: 50px;
+}
+.filters .react-datepicker-wrapper {
+    float: left;
+    width: 215px !important;
+}

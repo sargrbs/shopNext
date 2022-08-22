@@ -24,6 +24,10 @@ export default function Header() {
                 <NavDropdown.Divider />
                   <NavDropdown.Item href="/aux">Importar do Shop 9</NavDropdown.Item>
               </NavDropdown>
+
+              <NavDropdown title="Vendas" id="nav-dropdown-sales">
+                  <NavDropdown.Item href="/sales/ImportSales">Importar para o Shop</NavDropdown.Item>
+              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>

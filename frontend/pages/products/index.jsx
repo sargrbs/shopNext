@@ -107,7 +107,6 @@ export default function Products() {
                   <th>codigoFamilia</th> 
                   <th>codigoGrupo</th> 
                   <th>codigoMoeda</th> 
-                  
                   <th>codigoSubclasse</th> 
                   <th>codigoUnidadeVenda</th> 
                   <th>comprimento</th> 
