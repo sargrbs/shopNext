@@ -12,10 +12,9 @@ export default function ToastError(){
                 <Toast className="d-inline-block m-1"
                     bg="danger"
                     onClose={() => showToast(null, null, false, false)}
-                    show={error} delay={3000} autohide
+                    show={error} delay={3000}
                 >
                     <Toast.Header>
-                        <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
                         <strong className="me-auto">{ToastTitle}</strong>
                     </Toast.Header>
                     <Toast.Body>{toastMessage}</Toast.Body>

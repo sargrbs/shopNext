@@ -30,7 +30,7 @@ a {
 
 .filters {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 .filters .date {
   display: flex;

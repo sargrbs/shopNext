@@ -13,7 +13,6 @@ export default function ToastSuccess(){
             show={success} delay={3000} autohide
             >
             <Toast.Header>
-                <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
                 <strong className="me-auto">{ToastTitle}</strong>
             </Toast.Header>
             <Toast.Body>{toastMessage}</Toast.Body>

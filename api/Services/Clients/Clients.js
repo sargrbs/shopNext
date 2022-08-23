@@ -12,12 +12,12 @@ export default {
            
             if(fetchToken.success){
                 const token = fetchToken.getToken
-                const msgRes = []
+                const msgSuccess = []
+                const msgError = []
                 const clients = req.body
 
                 await Promise.all(clients.map( async (client) => {
-                    const getSignature = signature({method: "get", data: client})
-
+                    const getSignature = signature({method: "post", data: client})
                     const headers = {
                         'Signature': getSignature.signature, 
                         'CodFilial': 1,
@@ -25,17 +25,24 @@ export default {
                         'Timestamp': getSignature.timestamp
                     }
                     
-                    await axios.post(`${shopUrl}/clientes/`, {headers: headers})
+                    await axios.post(`${shopUrl}/clientes/`, client, {headers: headers})
                     .then(function (response) {
-                        msgRes.push(`Sucesso ao Criar ${client.nome} código gerado ${response.data.dados.codigoGerado}`)
+                        response.data.sucesso 
+                        ?
+                            msgSuccess.push(`Sucesso ao criar ${client.nome} / Código gerado  ${response.data.dados.codigoGerado}`)
+                        :
+                            msgError.push(`Erro ao criar ${client.nome} /  ${response.data.mensagem}`)
+
                         
                     })
                     .catch(function (error) {
-                        msgRes.push(`Erro ao criar ${client.nome} mensagem: ${error.dados.mensagem}`)
+                        return res.json(error)
+                        // msgRes.push(`Erro ao criar ${client.nome} mensagem: ${error.dados.mensagem}`)
                     })
                 }))
 
-                console.log(msgRes)
+                // console.log(msgSuccess, msgError)
+                return res.json({msgSuccess, msgError})
             }
 
         }catch(error){
