@@ -4,6 +4,7 @@ import {Modal, Button, Table} from 'react-bootstrap'
 const ShowVariations = (props) => {
 
     const data = props.variations
+    const productId = props.productId
 
     const [show, setShow] = useState(false);
 
@@ -22,6 +23,7 @@ const ShowVariations = (props) => {
                            <tr> 
                                 <th>Nome</th>
                                 <th>Quantidade</th>
+                                <th>Código ERP Web</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -30,6 +32,7 @@ const ShowVariations = (props) => {
                                     <tr key={index}>
                                         <td>{variation.name}</td>
                                         <td>{variation.productStock?.quantity}</td>
+                                        <td>{variation.web_erp_code}</td>
                                     </tr>
                                 )
                             })}

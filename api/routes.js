@@ -28,7 +28,11 @@ router.get("/", (req, res) => {
     router.post("/createProduct", ControllerProducts.createProduct)
     router.post("/createManyProducts", ControllerProducts.createMany)
     router.get("/getProducts", ControllerProducts.getProducts)
+    router.get("/productByErpCode/:code", ControllerProducts.getProductsByErpCode)
     router.delete("/deleteProduct/:id", ControllerProducts.deleteProduct)
+
+    router.put("/updateCodeProduct/:id", ControllerProducts.updateErpCode)
+    router.put("/updateCodeVariation/:id", ControllerProducts.updateErpCodeVariation)
     
 
 router.post("/createAux", ControllerAux.createAux)

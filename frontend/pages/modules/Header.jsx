@@ -17,6 +17,8 @@ export default function Header() {
                 <NavDropdown.Divider />
                   <NavDropdown.Item href="/products/">Importar em Massa</NavDropdown.Item>
                   <NavDropdown.Item href="/products/product">Importar por código</NavDropdown.Item>
+                <NavDropdown.Divider/>
+                  <NavDropdown.Item href="/products/productsLink">Vincular ERP Web / Shop</NavDropdown.Item>
               </NavDropdown>
               
               <NavDropdown title="Auxiliares" id="nav-dropdown-aux">
@@ -28,6 +30,7 @@ export default function Header() {
               <NavDropdown title="Vendas" id="nav-dropdown-sales">
                   <NavDropdown.Item href="/sales/ImportSales">Importar para o Shop</NavDropdown.Item>
               </NavDropdown>
+
             </Nav>
           </Navbar.Collapse>
         </Container>

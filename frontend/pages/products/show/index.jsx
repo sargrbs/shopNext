@@ -93,7 +93,7 @@ export default function Aux() {
                                     <td>{product.auxs.map((item, index) => {
                                         return(<Badge bg="dark" key={index}><Badge bg="warning" text="dark">{item.aux.group_name}</Badge><Badge key={index}>{item.aux.name}</Badge></Badge>)
                                     })}</td>
-                                    <td>{product.ProductVariations.length === 0 ? <h5><Badge bg="primary">Produto Simples</Badge></h5> : <ShowVariations variations={product.ProductVariations} /> }</td>
+                                    <td>{product.ProductVariations.length === 0 ? <h5><Badge bg="primary">Produto Simples</Badge></h5> : <ShowVariations productId={product.id} variations={product.ProductVariations} /> }</td>
                                     <td>
                                         <TooltipOverlay 
                                             tooltipContent={product.ProductVariations.length === 0 ? "Total" : "Soma de todas Variações" }

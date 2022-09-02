@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 import {Container, Row, Col, Table, Button, Form, InputGroup, ToastContainer,
-    Toast} from 'react-bootstrap'
+    Toast, Spinner} from 'react-bootstrap'
 import Header from '../modules/Header'
 import {useQuery, useMutation} from '@tanstack/react-query'
 import ToastSuccess from '../components/ToastSuccess'
@@ -79,57 +79,123 @@ export default function ImportSales() {
     )
 
     const clients = []
-
+    const sales = []
+    async function getProductsInfo(code){
+        const result = await axios.get(`${url}productByErpCode/${code}`)
+        return result
+    }
     if(isFetched){
-        data.map(sale => {
-            // console.log(sale, 'teste')
-            const verifyCpfCnpj = sale.cpf_cliente.length
-            const name = sale.nome_cliente.split(' ', sale.nome_cliente.length)
-            const fantasia = name.pop()
-            clients.push({
-                nome: name.join(" "),
-                fantasia: fantasia,
-                tipo: 'C',
-                fisicaJuridica: verifyCpfCnpj > 11 ? 'J' : 'F',
-                cpfCnpj: sale.cpf_cliente,
-                // rg: sale.pedido.cliente.rg,
-                // Ie: sale.pedido.cliente.ie === null ? 'ISENTO' : sale.pedido.cliente.ie,
-                cep: sale.cep,
-                endereco: sale.endereco,
-                // numero: sale.pedido.transporte.enderecoEntrega.numero,
-                complemento: sale.complemento,
-                bairro: sale.bairro,
-                cidade: sale.cidade,
-                uf: sale.estado,
-                pais: "",
-                telefone1: sale.telefone_cliente,
-                telefone2: null,
-                fax: null,
-                entregaCep: null,
-                entregaEndereco: null,
-                entregaNumero: null,
-                entregaComplemento: null,
-                entregaBairro: null,
-                entregaCidade: null,
-                entregaUf: null,
-                entregaPais: null,
-                entregaPontoRef1: null,
-                entregaPontoRef2: null,
-                faturamentoCep: null,
-                faturamentoEndereco: null,
-                faturamentoNumero: null,
-                faturamentoComplemento: null,
-                faturamentoBairro: null,
-                faturamentoCidade: null,
-                faturamentoUf: null,
-                faturamentoPais: null,
-                faturamentoPontoRef1: null,
-                faturamentoPontoRef2: null,
-                UrlContatos: null,
-                // IndicadorIE: sale.pedido.cliente.ie === null ? 9 : 1,
-
-            })  
-        })
+        if(data){
+            data.map(sale => {
+                const verifyCpfCnpj = sale.cpf_cliente.length
+                const name = sale.nome_cliente.split(' ', sale.nome_cliente.length)
+                const fantasia = name.pop()
+                clients.push({
+                    nome: name.join(" "),
+                    fantasia: fantasia,
+                    tipo: 'C',
+                    fisicaJuridica: verifyCpfCnpj > 11 ? 'J' : 'F',
+                    cpfCnpj: sale.cpf_cliente,
+                    // rg: sale.pedido.cliente.rg,
+                    // Ie: sale.pedido.cliente.ie === null ? 'ISENTO' : sale.pedido.cliente.ie,
+                    cep: sale.cep,
+                    endereco: sale.endereco,
+                    // numero: sale.pedido.transporte.enderecoEntrega.numero,
+                    complemento: sale.complemento,
+                    bairro: sale.bairro,
+                    cidade: sale.cidade,
+                    uf: sale.estado,
+                    pais: "",
+                    telefone1: sale.telefone_cliente,
+                    telefone2: null,
+                    fax: null,
+                    entregaCep: null,
+                    entregaEndereco: null,
+                    entregaNumero: null,
+                    entregaComplemento: null,
+                    entregaBairro: null,
+                    entregaCidade: null,
+                    entregaUf: null,
+                    entregaPais: null,
+                    entregaPontoRef1: null,
+                    entregaPontoRef2: null,
+                    faturamentoCep: null,
+                    faturamentoEndereco: null,
+                    faturamentoNumero: null,
+                    faturamentoComplemento: null,
+                    faturamentoBairro: null,
+                    faturamentoCidade: null,
+                    faturamentoUf: null,
+                    faturamentoPais: null,
+                    faturamentoPontoRef1: null,
+                    faturamentoPontoRef2: null,
+                    UrlContatos: null,
+                    // IndicadorIE: sale.pedido.cliente.ie === null ? 9 : 1,
+    
+                })  
+            })
+           
+    
+            // data.map(sale => {
+            //     console.log(sale, 'teste')
+            //     const arrayProdutcs = []
+    
+            //     const products = sale.codigo_produtos.split(',')
+            //     console.log(products)
+    
+            //     products.map(p => {
+            //         {
+            //             Codigo: "1",
+            //             CodigoCor: null,
+            //             CodigoTamanho: null,
+            //             Quantidade: 1.0000,
+            //             PrecoUnitario: 576.34,
+            //             DescontoUnitario: 100.00
+            //         }
+            //     })
+               
+            //     sales.push({
+                    
+            //           CpfCnpj: sale.cpf_cliente,
+            //           CodigoOperacao: "500",
+            //           CodigoCaixa: "1",
+            //           Data: sale.data_venda,
+            //           Produtos: arrayProdutcs,
+            //           Recebimentos: [
+            //               {
+            //               ValorParcelas: 476.34,
+            //               CodigoAdministradora: 1,
+            //               Vencimento: null,
+            //               Nsu: "995544",
+            //               QuantidadeParcelas: 1,
+            //               NumeroCartao: "2344",
+            //               Tipo: "C"
+            //               }
+            //             ],
+            //           DadosEntrega: {
+            //             Valor: 10.00,
+            //             OpcoesFretePagoPor: "O",
+            //             PesoBruto: 0.0,
+            //             PesoLiquido: 0.0,
+            //             Volume: 0.0,
+            //             DataEntrega: null,
+            //             CnpjTransportadora: "24165926000103",
+            //             NaoSomarFreteTotalNota: true,
+            //             OutroEndereco: {
+            //               Cep: "82600380",
+            //               Endereco: "RUa nunia",
+            //               Numero: "dfjs 11",
+            //               Complemento: null,
+            //               Bairro: "Teste",
+            //               Cidade: "Curitiba",
+            //               Uf: "PR"
+            //               }
+            //             }
+                          
+    
+            //     })  
+            // })
+        }
     }
 
     function createClient(){
@@ -247,8 +313,14 @@ export default function ImportSales() {
                                 </tr>
                             </thead>
                             <tbody>
-                                { isLoading ? <tr><td colSpan={5}><span>load</span></td></tr>  :
-                                    !data ? <tr><td colSpan={5}><span>Importe os pedidos</span></td></tr> :
+                                { isLoading ?   <tr>
+                                                    <td colSpan={5}>
+                                                        <Spinner animation="border" role="status">
+                                                            <span className="visually-hidden">Loading...</span>
+                                                        </Spinner>
+                                                    </td>
+                                                </tr>  :
+                                    !data ? <tr><td colSpan={5}><span>Nenhum pedido encontrado, tente outra data ou importe do Bling</span></td></tr> :
                                     data.map((order, index) => {
                                     return (
                                         <tr key={index}>

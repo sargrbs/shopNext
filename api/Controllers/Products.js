@@ -1,6 +1,4 @@
 import prisma from '../Database/prisma'
-import {v4 as uuidv4} from 'uuid';
-
 
 export default {
     async createProduct(req, res) {
@@ -51,6 +49,8 @@ export default {
                         select: {
                             name: true,
                             code: true,
+                            id: true,
+                            web_erp_code: true,
                             productStock: true
                         }
                     },
@@ -70,7 +70,7 @@ export default {
             return res.json(error)
         }
     },
-
+    
     async deleteProduct(req, res){
         const id = req.params
         try{
@@ -83,6 +83,59 @@ export default {
         }catch(error){
             console.log(error)
             return res.json(error)
+        }
+    },
+
+    async getProductsByErpCode(req, res){
+        const code = req.params
+        try{
+            const data = await prisma.product.findFirst({
+                where:{
+                    erp_code: code.code
+                }
+            })
+            return res.json(data)
+        }catch(error){
+            console.log(error)
+            return res.json(error)
+        }
+    },
+    async updateErpCode(req, res){
+        try{
+            const id = req.params
+            const {web_erp_code} = req.body
+
+            const update = await prisma.product.update({
+                where:{
+                    id: id.id
+                },
+                data:{
+                    web_erp_code: web_erp_code
+                }
+            })
+
+            return res.json(update)
+        }catch(error){
+            console.log(error)
+        }    
+    },
+    async updateErpCodeVariation(req, res){
+        try{
+            const id = req.params
+            const {web_erp_code} = req.body
+
+            const update = await prisma.ProductVariations.update({
+                where:{
+                    id: id.id
+                },
+                data:{
+                    web_erp_code: web_erp_code
+                }
+            })
+
+            return res.json(update)
+        }catch(error){
+            console.log(error)
         }
     }
 }
