@@ -14,7 +14,7 @@ import AlertDelete from '../../components/AlertDelete'
 
 async function getData(){
   const url = process.env.AXIOS_URL
-  const result = await axios.get(`${url}getProducts`)
+  const result = await axios.get(`${url}findAll`)
   return result.data
 }
 
@@ -107,6 +107,7 @@ export default function Aux() {
                                     <td>
                                         <DropdownButton as={ButtonGroup} title="Ação" id="bg-nested-dropdown">
                                             <Dropdown.Item href='products/edit'>Editar</Dropdown.Item>
+                                            <Dropdown.Item href={`productLink/${product.id}`}>Vincular ERP Web</Dropdown.Item>
                                             <AlertDelete 
                                                 item={`${product.name}`} 
                                                 url={urlDelete} 

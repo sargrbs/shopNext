@@ -39,6 +39,20 @@ model ProductStock {
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
+model Producterplink {
+  id String @unique
+  erp_code String?
+
+  Product   Product? @relation(fields: [ProductId], references: [id])
+  ProductId String?
+
+  ProductVariations   ProductVariations? @relation(fields: [ProductVariationsId], references: [id])
+  ProductVariationsId String?
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
 model ProductVariations {
   id String @unique
   name String
@@ -55,6 +69,8 @@ model ProductVariations {
   productId String
 
   auxs VariationtOnAux[]
+
+  Producterplink Producterplink[]
 }
 
 model Aux {
@@ -118,6 +134,8 @@ model Product {
   auxs ProductOnAux[]
 
   ProductStock ProductStock[]
+
+  Producterplink Producterplink[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

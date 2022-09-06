@@ -2,8 +2,10 @@ import { Router } from 'express';
 import ServiceProducts from './Services/Products/Products';
 import ServiceAux from './Services/Products/ProductAux';
 import ServiceClients from './Services/Clients/Clients';
+// Controller
 import ControllerAux from './Controllers/Aux'
 import ControllerProducts from './Controllers/Products'
+import ControllerProductERP from './Controllers/ProductERPLink'
 
 const router = Router();
 
@@ -25,14 +27,22 @@ router.get("/", (req, res) => {
 
 //CONTROLLERS
     //Products
+    router.get("/findOne/:id", ControllerProducts.findOne)
+    router.get("/findAll", ControllerProducts.findAll)
+    router.get("/productByErpCode/:code", ControllerProducts.getProductsByErpCode)
     router.post("/createProduct", ControllerProducts.createProduct)
     router.post("/createManyProducts", ControllerProducts.createMany)
-    router.get("/getProducts", ControllerProducts.getProducts)
-    router.get("/productByErpCode/:code", ControllerProducts.getProductsByErpCode)
     router.delete("/deleteProduct/:id", ControllerProducts.deleteProduct)
 
-    router.put("/updateCodeProduct/:id", ControllerProducts.updateErpCode)
-    router.put("/updateCodeVariation/:id", ControllerProducts.updateErpCodeVariation)
+    //router.put("/updateCodeProduct/:id", ControllerProducts.updateErpCode)
+    //router.put("/updateCodeVariation/:id", ControllerProducts.updateErpCodeVariation)
+    
+    //Product ERP Link
+    router.get("/getLinks", ControllerProductERP.getAll)
+    router.post("/createLinkVariation", ControllerProductERP.createLinkVariation)
+    router.post("/createLink", ControllerProductERP.createLink)
+    
+    
     
 
 router.post("/createAux", ControllerAux.createAux)

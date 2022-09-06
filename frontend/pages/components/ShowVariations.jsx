@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Modal, Button, Table} from 'react-bootstrap'
+import {Modal, Button, Table, Badge} from 'react-bootstrap'
 
 const ShowVariations = (props) => {
 
@@ -32,7 +32,14 @@ const ShowVariations = (props) => {
                                     <tr key={index}>
                                         <td>{variation.name}</td>
                                         <td>{variation.productStock?.quantity}</td>
-                                        <td>{variation.web_erp_code}</td>
+                                        <td>{ variation.Producterplink.map((link, index) => 
+                                                {
+                                                    return (
+                                                        <Badge style={{margin: 5}} key={index} bg="warning" text="dark">{link.erp_code}</Badge>
+                                                    )
+                                                }
+                                            )}
+                                         </td>
                                     </tr>
                                 )
                             })}

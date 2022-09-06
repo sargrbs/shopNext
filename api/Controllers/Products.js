@@ -41,7 +41,7 @@ export default {
         }
     },
 
-    async getProducts(req, res){
+    async findAll(req, res){
         try{
             const data = await prisma.product.findMany({
                 include:{
@@ -51,15 +51,54 @@ export default {
                             code: true,
                             id: true,
                             web_erp_code: true,
-                            productStock: true
-                        }
+                            productStock: true,
+                            Producterplink: true
+                        },
+                        
                     },
                     ProductStock: true,
                     auxs: {
                         select:{
                             aux: true
                         }
-                    }
+                    },
+                    Producterplink: true
+                }
+            })
+
+            return res.json(data)
+        }catch(error){
+            console.log(error)
+
+            return res.json(error)
+        }
+    },
+    async findOne(req, res){
+        try{
+            const id = req.params
+            const data = await prisma.product.findFirst({
+                where:{
+                    id: id.id
+                },
+                include:{
+                    ProductVariations: {
+                        select: {
+                            name: true,
+                            code: true,
+                            id: true,
+                            web_erp_code: true,
+                            productStock: true,
+                            Producterplink: true
+                        },
+                        
+                    },
+                    ProductStock: true,
+                    auxs: {
+                        select:{
+                            aux: true
+                        }
+                    },
+                    Producterplink: true
                 }
             })
 
