@@ -27,11 +27,15 @@ async function getOrders({queryKey}){
 export default function ImportSales() {
     const url = process.env.AXIOS_URL
 
+
     const {showToast} = useToast()
 
     const [name, setSearchname] = useState("")
+
     const [btnDisabled, setBtnDisabled] = useState(true)
+
     const [startDate, setStartDate] = useState(new Date(moment().subtract(1, 'days')))
+    
     const [endDate, setEndDate] = useState(new Date())
     
     const [show, setShow] = useState(true)
@@ -58,12 +62,28 @@ export default function ImportSales() {
     const [endDateget, setEndDateget] = useState(moment(new Date()).format('YYYY-MM-DDT00:00:00.000Z'))
     
     const {data, refetch, isFetched, isLoading} = useQuery(['getOrders', startDateGet, endDateget, name], getOrders, {refetchOnWindowFocus: false, enable: false})
-
+    
     const [arraySuccess, setArraySuccess] = useState([])
+
     const [arrayError, setArrayError] = useState([])
 
     const { mutate: create} = useMutation(
         async (data) => { return axios.post(`${url}createClient`, data) },
+        {
+            onSuccess: (res) => {
+                setArraySuccess(res.data.msgSuccess)
+                setArrayError(res.data.msgError)
+                setShow(true)
+                setBtnDisabled(false)
+            },
+            onError: (err) => {
+                console.log(err, 'erro')
+                showToast(`Erro ao adicionar cliente / ${err}`, 'Erro ao criar cliente', false, true)
+            },
+        }
+    )
+    const { mutate: createSale} = useMutation(
+        async (data) => { return axios.post(`${url}createSale`, data) },
         {
             onSuccess: (res) => {
                 setArraySuccess(res.data.msgSuccess)
@@ -136,70 +156,93 @@ export default function ImportSales() {
             })
            
     
-            // data.map(sale => {
-            //     console.log(sale, 'teste')
-            //     const arrayProdutcs = []
-    
-            //     const products = sale.codigo_produtos.split(',')
-            //     console.log(products)
-    
-            //     products.map(p => {
-            //         {
-            //             Codigo: "1",
-            //             CodigoCor: null,
-            //             CodigoTamanho: null,
-            //             Quantidade: 1.0000,
-            //             PrecoUnitario: 576.34,
-            //             DescontoUnitario: 100.00
-            //         }
-            //     })
-               
-            //     sales.push({
+            data.map(sale => {
+                const arrayProdutcs = []
+                console.log(sale)
+                if(sale.products){
                     
-            //           CpfCnpj: sale.cpf_cliente,
-            //           CodigoOperacao: "500",
-            //           CodigoCaixa: "1",
-            //           Data: sale.data_venda,
-            //           Produtos: arrayProdutcs,
-            //           Recebimentos: [
-            //               {
-            //               ValorParcelas: 476.34,
-            //               CodigoAdministradora: 1,
-            //               Vencimento: null,
-            //               Nsu: "995544",
-            //               QuantidadeParcelas: 1,
-            //               NumeroCartao: "2344",
-            //               Tipo: "C"
-            //               }
-            //             ],
-            //           DadosEntrega: {
-            //             Valor: 10.00,
-            //             OpcoesFretePagoPor: "O",
-            //             PesoBruto: 0.0,
-            //             PesoLiquido: 0.0,
-            //             Volume: 0.0,
-            //             DataEntrega: null,
-            //             CnpjTransportadora: "24165926000103",
-            //             NaoSomarFreteTotalNota: true,
-            //             OutroEndereco: {
-            //               Cep: "82600380",
-            //               Endereco: "RUa nunia",
-            //               Numero: "dfjs 11",
-            //               Complemento: null,
-            //               Bairro: "Teste",
-            //               Cidade: "Curitiba",
-            //               Uf: "PR"
-            //               }
-            //             }
-                          
-    
-            //     })  
-            // })
+                    Promise.all(sale.products.map( async (p) => {
+                        const data = await getProductsInfo(p.erp_code)
+                        let cor = null
+                        let tamanho = null
+                        data.data.aux.map(a => {
+                            if(a.group === 'cores'){
+                                return(
+                                    cor = a.code
+                                )
+                            }
+                            if(a.group === 'tamanhos'){
+                                return(
+                                    tamanho = a.code
+                                )
+                            }
+                        })
+                        arrayProdutcs.push(
+                            {
+                                Codigo: data.data.code,
+                                CodigoCor: cor,
+                                CodigoTamanho: tamanho,
+                                Quantidade: p.quantity,
+                                PrecoUnitario: p.price,
+                                DescontoUnitario: p.discount
+                            }
+                        )
+                        
+                    }))
+                }
+                
+                const address = sale.endereco.split('-')
+                sales.push({
+                    
+                    CpfCnpj: sale.cpf_cliente,
+                    CodigoOperacao: "500",
+                    CodigoCaixa: "1",
+                    Data: sale.data_venda,
+                    Produtos: arrayProdutcs,
+                    Recebimentos: [
+                        {
+                        ValorParcelas: sale.valor_total,
+                        valor: sale.valor_total,
+                        CodigoAdministradora: null,
+                        Vencimento: null,
+                        Nsu: null,
+                        QuantidadeParcelas: "1",
+                        NumeroCartao: null,
+                        Tipo: "CB"
+                        }
+                    ],
+                    DadosEntrega: {
+                    Valor: sale.valor_frete,
+                    OpcoesFretePagoPor: "O",
+                    PesoBruto: 0.0,
+                    PesoLiquido: 0.0,
+                    Volume: sale.volumes,
+                    DataEntrega: null,
+                    CnpjTransportadora: sale.transportadora.cnpj,
+                    NaoSomarFreteTotalNota: true,
+                    OutroEndereco: {
+                        Cep: sale.cep,
+                        Endereco: address[0],
+                        Numero: address[1],
+                        Complemento: sale.complemento,
+                        Bairro: sale.bairro,
+                        Cidade: sale.cidade,
+                        Uf: sale.estado
+                        }
+                    }      
+                })  
+            })
         }
     }
 
+    console.log(sales)
+
     function createClient(){
         create(clients)
+    }
+
+    function createSales(){
+        createSale(sales)
     }
     return (
         <>
@@ -297,7 +340,7 @@ export default function ImportSales() {
                                 <div className="">
                                     <div className="filters">
                                         <Button variant="success" onClick={createClient}>Enviar Cliente</Button>
-                                        <Button variant="primary" disabled={btnDisabled}>Enviar Venda</Button>
+                                        <Button variant="primary" onClick={createSales} disabled={btnDisabled}>Enviar Venda</Button>
                                     </div>
                                 </div>
                             </Col>

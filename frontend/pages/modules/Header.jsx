@@ -13,9 +13,9 @@ export default function Header() {
               <Nav.Link href="/">Home</Nav.Link>
               <NavDropdown title="Produtos" id="nav-dropdown-products">
                 <NavDropdown.Item href="/products/show/">Gerenciar Todos</NavDropdown.Item>
-                <NavDropdown.Item href="/products/show/showBycode">Pesquisar por código</NavDropdown.Item>
+                {/* <NavDropdown.Item href="/products/show/showBycode">Pesquisar por código</NavDropdown.Item> */}
                 <NavDropdown.Divider />
-                  <NavDropdown.Item href="/products/">Importar em Massa</NavDropdown.Item>
+                  {/* <NavDropdown.Item href="/products/">Importar em Massa</NavDropdown.Item> */}
                   <NavDropdown.Item href="/products/product">Importar por código</NavDropdown.Item>
                 {/* <NavDropdown.Divider/>  <NavDropdown.Item href="/products/productsLink">Vincular ERP Web / Shop</NavDropdown.Item> */}
               </NavDropdown>

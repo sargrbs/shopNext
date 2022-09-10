@@ -30,7 +30,8 @@ module.exports = (phase) => {
         return 'http://localhost:5000/'
       }
      
-    })()
+    })(),
+
   }
 
   // next.config.js object

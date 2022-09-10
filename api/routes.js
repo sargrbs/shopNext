@@ -2,6 +2,8 @@ import { Router } from 'express';
 import ServiceProducts from './Services/Products/Products';
 import ServiceAux from './Services/Products/ProductAux';
 import ServiceClients from './Services/Clients/Clients';
+import ServiceSales from './Services/Sales/Sales';
+import ServiceBling from './Services/Bling/Product';
 // Controller
 import ControllerAux from './Controllers/Aux'
 import ControllerProducts from './Controllers/Products'
@@ -24,12 +26,15 @@ router.get("/", (req, res) => {
     router.get("/getAux", ServiceAux.getAux) //Import aux using shop 9 api
     ////Clients
     router.post("/createClient", ServiceClients.create)
+    //Sales
+    router.post("/createSale", ServiceSales.create)
+    //Bling Product
+    router.get("/getBlingProduct/:code", ServiceBling.getBlingProduct)
 
 //CONTROLLERS
     //Products
     router.get("/findOne/:id", ControllerProducts.findOne)
     router.get("/findAll", ControllerProducts.findAll)
-    router.get("/productByErpCode/:code", ControllerProducts.getProductsByErpCode)
     router.post("/createProduct", ControllerProducts.createProduct)
     router.post("/createManyProducts", ControllerProducts.createMany)
     router.delete("/deleteProduct/:id", ControllerProducts.deleteProduct)
@@ -39,8 +44,10 @@ router.get("/", (req, res) => {
     
     //Product ERP Link
     router.get("/getLinks", ControllerProductERP.getAll)
+    router.get("/productByErpCode/:code", ControllerProductERP.getProductsByErpCode)
     router.post("/createLinkVariation", ControllerProductERP.createLinkVariation)
     router.post("/createLink", ControllerProductERP.createLink)
+    router.delete("/deleteLink/:id", ControllerProductERP.deleteLink)
     
     
     

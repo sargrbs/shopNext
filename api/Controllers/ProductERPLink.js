@@ -70,7 +70,7 @@ export default {
             return res.json(error)
         }
     },
-    async deleteItem(req, res){
+    async deleteLink(req, res){
         const id = req.params
 
         try{
@@ -80,6 +80,56 @@ export default {
                     id: id.id
                 }
             })
+
+            return res.json(data)
+
+        }catch(error){
+            console.log(error)
+            return res.json(error)
+        }
+    },
+
+    async getProductsByErpCode(req, res){
+        try{
+            const id = req.params
+            const data = await prisma.producterplink.findFirst({
+                include:{
+                    Product: true,
+                    ProductVariations: true
+                }
+            })
+            if(data.ProductId === null){
+                const variation = await prisma.ProductVariations.findFirst({
+                    where:{
+                        id: data.ProductVariationsId
+                    },
+                    include:{
+                        auxs: true,
+                    }
+                })
+
+                const promises = variation.auxs.map(async (aux) => {
+                    
+                    const result = await prisma.aux.findFirst({
+                        where:{
+                            id: aux.auxId
+                        }
+                    })
+                    
+                    const code = result.code
+                    const group = result.group_name
+
+                    return ({code: code, group: group})
+                })
+
+                const arr = await Promise.all(promises)
+
+                return res.json({code: variation.code, aux: arr})
+                
+            }else{
+
+            }
+            // console.log(data)
 
             return res.json(data)
 

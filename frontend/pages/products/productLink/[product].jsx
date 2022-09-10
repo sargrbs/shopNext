@@ -27,27 +27,34 @@ export default function productLink() {
     const { showToast } = useToast()
 
     const [show, setShow] = useState(false)
+
     const [erpCode, setErpCode] = useState(null)
 
+    const [erpId, setErpId] = useState(null)
+
     const handleClose = () => setShow(false)
-    const handleShow = () =>  setShow(true) 
+
+    const handleShow = (e) =>  {
+        setErpCode(e.currentTarget.getAttribute("data-code"))
+        setErpId(e.currentTarget.getAttribute("data-id"))
+        setShow(true) 
+    }
 
     const { data, isFetching, refetch, isFetched } = useQuery(['getProduct', product], getData, { refetchOnWindowFocus: false, enable: false })
     
-    console.log(data)
-
-
     const { mutate: update } = useMutation(
        
-        async (data) => {  console.log(`${url}${data.link}`); return axios.post(`${url}${data.link}`, data) },
+        async (data) => { return axios.post(`${url}${data.link}`, data) },
         {
             onSuccess: (res) => {
-                queryClient.invalidateQueries("getAllProducts")
-                showToast(`Sucesso ao Atualizar  ${res.data.name}`, 'Sucesso ao Atualizar', true, false)
+                queryClient.invalidateQueries('getProduct')
+                console.log(res)
+                showToast(`Sucesso ao Adicionar código ${res.data.erp_code}`, 'Sucesso ao Adicionar', true, false)
+                
             },
             onError: (err) => {
                 console.log(err, 'erro')
-                showToast(`Erro ao Atualizar / ${err}`, 'Erro ao criar cliente', false, true)
+                showToast(`Erro ao Adicionar / ${err}`, 'Erro ao criar cliente', false, true)
             },
         }
     )
@@ -62,12 +69,13 @@ export default function productLink() {
 
     const { mutate: deleteItem } = useMutation(
         async () => {
-          return await axios.delete(`${url}/deleteLink/${product}`)
+          return await axios.delete(`${url}deleteLink/${erpId}`)
         },
         {
           onSuccess: (res) => {
             showToast(`Sucesso ao deletar item`, 'Item Excluido', true, false)
-            queryClient.invalidateQueries(getProduct)
+            queryClient.invalidateQueries('getProduct')
+            setShow(false)
           },
           onError: (err) => {
             console.log('error')
@@ -89,7 +97,7 @@ export default function productLink() {
                 centered
             >
                 <Modal.Header closeButton>
-                    <Modal.Title >Deletar item {erpCode}</Modal.Title>
+                    <Modal.Title >Deletar código ERP {erpCode}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     Confirma a exclusão do item??
@@ -140,7 +148,7 @@ export default function productLink() {
                                                             {
                                                                 return (
                                                                     <Badge style={{margin: 5}} key={index} bg="dark" text="light">
-                                                                        <Badge onClick={handleShow} bg="danger" text="light" style={{cursor: 'pointer'}}>X</Badge>  
+                                                                        <Badge onClick={handleShow} data-id={link.id} data-code={link.erp_code} bg="danger" text="light" style={{cursor: 'pointer'}}>X</Badge>  
                                                                         {link.erp_code}
                                                                     </Badge>
                                                                 )
@@ -174,7 +182,7 @@ export default function productLink() {
                                                                         { variation.Producterplink.map((link, index) => 
                                                                             {
                                                                                 return (
-                                                                                    <Badge style={{margin: 5}} key={index} bg="dark" text="light"><Badge onClick={handleShow} bg="danger" text="light" style={{cursor: 'pointer'}}>X</Badge>  {link.erp_code}</Badge>
+                                                                                    <Badge style={{margin: 5}} key={index} bg="dark" text="light"><Badge onClick={handleShow} data-id={link.id} data-code={link.erp_code} bg="danger" text="light" style={{cursor: 'pointer'}}>X</Badge>  {link.erp_code}</Badge>
                                                                                 )
                                                                             }
                                                                         )}
