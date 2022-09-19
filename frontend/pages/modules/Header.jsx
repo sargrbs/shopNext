@@ -30,6 +30,11 @@ export default function Header() {
                   <NavDropdown.Item href="/sales/ImportSales">Importar para o Shop</NavDropdown.Item>
               </NavDropdown>
 
+              <NavDropdown title="Empresa" id="nav-dropdown-sales">
+                  <NavDropdown.Item href="/company/createCompany">Cadastrar Empresa</NavDropdown.Item>
+                  <NavDropdown.Item href="/company/show">Gerenciar Empresa</NavDropdown.Item>
+              </NavDropdown>
+
             </Nav>
           </Navbar.Collapse>
         </Container>

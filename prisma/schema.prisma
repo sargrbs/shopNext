@@ -141,3 +141,14 @@ model Product {
   updated_at DateTime @updatedAt
 }
 
+model Company {
+  id String @unique
+  name String
+  cnpj String
+  serial String
+  branch_number String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+

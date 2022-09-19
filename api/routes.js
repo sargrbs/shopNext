@@ -5,9 +5,10 @@ import ServiceClients from './Services/Clients/Clients';
 import ServiceSales from './Services/Sales/Sales';
 import ServiceBling from './Services/Bling/Product';
 // Controller
-import ControllerAux from './Controllers/Aux'
-import ControllerProducts from './Controllers/Products'
-import ControllerProductERP from './Controllers/ProductERPLink'
+import ControllerAux from './Controllers/AuxController'
+import ControllerProducts from './Controllers/ProductsController'
+import ControllerProductERP from './Controllers/ProductERPLinkController'
+import ControllerCompany from './Controllers/CompanyController'
 
 const router = Router();
 
@@ -38,9 +39,6 @@ router.get("/", (req, res) => {
     router.post("/createProduct", ControllerProducts.createProduct)
     router.post("/createManyProducts", ControllerProducts.createMany)
     router.delete("/deleteProduct/:id", ControllerProducts.deleteProduct)
-
-    //router.put("/updateCodeProduct/:id", ControllerProducts.updateErpCode)
-    //router.put("/updateCodeVariation/:id", ControllerProducts.updateErpCodeVariation)
     
     //Product ERP Link
     router.get("/getLinks", ControllerProductERP.getAll)
@@ -49,7 +47,10 @@ router.get("/", (req, res) => {
     router.post("/createLink", ControllerProductERP.createLink)
     router.delete("/deleteLink/:id", ControllerProductERP.deleteLink)
     
-    
+    //Company
+    router.post("/createCompany", ControllerCompany.create)
+    router.get("/companyFindAll", ControllerCompany.findAll)
+    router.delete("/deleteCompay/:id", ControllerCompany.delete)
     
 
 router.post("/createAux", ControllerAux.createAux)
